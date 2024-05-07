@@ -1,12 +1,19 @@
-import './App.css';
+import { useIsAuthenticated } from "@azure/msal-react";
+import { Button } from "@nextui-org/button";
+import "./App.css";
 
 const App = () => {
-  return (
-    <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-    </div>
-  );
+	const isAuthenticated = useIsAuthenticated();
+
+	return (
+		<div>
+			{isAuthenticated ? (
+				<h1>以登录</h1>
+			) : (
+				<Button color="primary">登录</Button>
+			)}
+		</div>
+	);
 };
 
 export default App;
