@@ -4,6 +4,12 @@ import { pluginSvgr } from "@rsbuild/plugin-svgr";
 
 export default defineConfig({
 	plugins: [pluginReact(), pluginSvgr()],
+	output: {
+		copy:
+			process.env.NODE_ENV === "development"
+				? [{ from: "./public", to: "" }]
+				: undefined,
+	},
 	dev: {
 		writeToDisk: true,
 	},
@@ -11,5 +17,8 @@ export default defineConfig({
 		publicDir: {
 			watch: true,
 		},
+	},
+	html: {
+		template: "./template/index.html",
 	},
 });

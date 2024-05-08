@@ -9,6 +9,8 @@
       "16": "icon16.png",
       "48": "icon48.png",
       "128": "icon128.png"
-    }
-  }
+    },
+    "default_title": "点击打开面板"
+  },
+  "permissions": ["contextMenus", "storage"]
 }

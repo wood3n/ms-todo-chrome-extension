@@ -37,6 +37,9 @@ devDependencies:
   '@rsbuild/plugin-svgr':
     specifier: ^0.6.11
     version: 0.6.11(@rsbuild/core@0.6.11)(typescript@5.4.5)
+  '@types/node':
+    specifier: ^20.12.10
+    version: 20.12.10
   '@types/react':
     specifier: ^18.3.1
     version: 18.3.1
@@ -3314,6 +3317,12 @@ packages:
     resolution: {integrity: sha512-X+2qazGS3jxLAIz5JDXDzglAF3KpijdhFxlf/V1+hEsOUc+HnWi81L/uv/EvGuV90WY+7mPGFCUDGfQC3Gj95Q==}
     dev: false
 
+  /@types/node@20.12.10:
+    resolution: {integrity: sha512-Eem5pH9pmWBHoGAT8Dr5fdc5rYA+4NAovdM4EktRPVAAiJhmWWfQrA0cFhAbOsQdSfIHjAud6YdkbL69+zSKjw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/prop-types@15.7.12:
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
@@ -4546,6 +4555,10 @@ packages:
     resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
     engines: {node: '>=14.17'}
     hasBin: true
+    dev: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
 
   /update-browserslist-db@1.0.15(browserslist@4.23.0):
