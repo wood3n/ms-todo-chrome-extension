@@ -12,7 +12,8 @@
     "useDefineForClassFields": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["chrome-types"]
   },
   "include": ["src"]
 }

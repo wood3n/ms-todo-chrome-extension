@@ -49,6 +49,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.19
     version: 10.4.19(postcss@8.4.38)
+  chrome-types:
+    specifier: ^0.1.282
+    version: 0.1.282
   postcss:
     specifier: ^8.4.38
     version: 8.4.38
@@ -3469,6 +3472,10 @@ packages:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  /chrome-types@0.1.282:
+    resolution: {integrity: sha512-gG0mUvPZAwzYGVK6EJLt4dgfL21FAf+kZu4Y2oOedAfzI6u4svLdAnw0GK6kPo1VNqThZ/LlwjGzqXglb+TS6g==}
+    dev: true
 
   /clsx@1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
