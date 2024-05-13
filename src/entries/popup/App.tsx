@@ -1,5 +1,6 @@
 import SignInButton from "@/components/LoginButton";
 import { useIsAuthenticated } from "@azure/msal-react";
+
 import "./App.css";
 
 const App = () => {
