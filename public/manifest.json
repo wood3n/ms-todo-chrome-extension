@@ -1,21 +1,25 @@
 {
-  "manifest_version": 3,
-  "name": "Microsoft Todo App Chrome Extension",
-  "description": "Microsoft Todo App Chrome Extension",
-  "version": "1.0",
-  "options_page": "option.html",
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    },
-    "default_title": "点击打开面板"
-  },
-  "background": {
-    "service_worker": "background.js",
-    "type": "module"
-  },
-  "permissions": ["contextMenus", "storage", "notifications"]
+	"manifest_version": 3,
+	"name": "Microsoft Todo App Chrome Extension",
+	"description": "Microsoft Todo App Chrome Extension",
+	"version": "1.0",
+	"options_page": "option.html",
+	"action": {
+		"default_popup": "popup.html",
+		"default_icon": {
+			"16": "icon16.png",
+			"48": "icon48.png",
+			"128": "icon128.png"
+		},
+		"default_title": "点击打开面板"
+	},
+	"background": {
+		"service_worker": "background.js",
+		"type": "module"
+	},
+	"permissions": ["identity", "contextMenus", "storage", "notifications"],
+	"host_permissions": [
+		"https://login.microsoftonline.com/*",
+		"https://graph.microsoft.com/v1.0/me/*"
+	]
 }

@@ -4,12 +4,15 @@ import request from "./request";
  * https://learn.microsoft.com/en-us/graph/api/resources/todotasklist?view=graph-rest-1.0
  */
 export interface TodoList {
-	value?: Value[];
+	value?: TodoListData[];
 }
 
-export interface Value {
+export interface BasicTodoData {
 	/** 任务列表的名称 */
-	displayName?: string;
+	displayName: string;
+}
+
+export interface TodoListData extends BasicTodoData {
 	/** 如果用户是给定任务列表的所有者，则为 True */
 	isOwner?: boolean;
 	/** 任务列表是否与其他用户共享 */
@@ -29,3 +32,12 @@ export interface Value {
 }
 
 export const getTodoList = () => request.get<TodoList>("/me/todo/lists");
+
+export const createTodoList = (data: BasicTodoData) =>
+	request.post<TodoListData>("/me/todo/lists", data);
+
+export const updateTodoList = (id: string, data: BasicTodoData) =>
+	request.patch<TodoListData>(`/me/todo/lists/${id}`, data);
+
+export const deleteTodoList = (id: string) =>
+	request.delete<void>(`/me/todo/lists/${id}`);

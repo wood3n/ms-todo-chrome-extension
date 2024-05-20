@@ -1,4 +1,4 @@
-import SignInButton from "@/components/LoginButton";
+import SignInButton from "@/components/login-button";
 import { useIsAuthenticated } from "@azure/msal-react";
 
 import "./App.css";

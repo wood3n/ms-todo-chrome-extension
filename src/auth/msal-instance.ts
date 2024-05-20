@@ -3,6 +3,7 @@ import {
 	LogLevel,
 	PublicClientApplication,
 } from "@azure/msal-browser";
+import { ClientId, MSAuthUrl, RedirectUri, TenantId } from "./azure-app-info";
 
 /**
  * Configuration object to be passed to MSAL instance on creation.
@@ -11,13 +12,13 @@ import {
  */
 export const msalConfig: Configuration = {
 	auth: {
-		clientId: "e5da5554-682a-4a9f-ac32-c1a741b6050c",
-		authority:
-			"https://login.microsoftonline.com/057ab151-e7cd-45a5-8655-4303bf366831",
-		redirectUri: "http://localhost:3000",
+		clientId: ClientId,
+		authority: `${MSAuthUrl}/${TenantId}`,
+		redirectUri: RedirectUri,
+		postLogoutRedirectUri: RedirectUri,
 	},
 	cache: {
-		cacheLocation: "sessionStorage", // This configures where your cache will be stored
+		cacheLocation: "localStorage", // This configures where your cache will be stored
 		storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
 	},
 	system: {
