@@ -1,12 +1,19 @@
-import SignInButton from "@/components/login-button";
+import { getUser } from "@/api/user";
+import SignInButton from "@/components/signin-button";
+import SignOutButton from "@/components/signout-button";
 import { useIsAuthenticated } from "@azure/msal-react";
 
 import "./App.css";
+import { useEffect } from "react";
 
 const App = () => {
 	const isAuthenticated = useIsAuthenticated();
 
-	return <div>{isAuthenticated ? <h1>已登录</h1> : <SignInButton />}</div>;
+	useEffect(() => {
+		getUser();
+	}, []);
+
+	return <div>{isAuthenticated ? <SignOutButton /> : <SignInButton />}</div>;
 };
 
 export default App;

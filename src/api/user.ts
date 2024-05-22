@@ -1,5 +1,5 @@
-import request from "./request";
+import { graphClient } from "./graph-client";
 
 import type { User } from "@microsoft/microsoft-graph-types";
 
-export const getUser = () => request.get<User>("/me");
+export const getUser = () => graphClient.api("/me").get() as Promise<User>;
