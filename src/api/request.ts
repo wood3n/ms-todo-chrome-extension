@@ -1,4 +1,5 @@
-import axios from "axios";
+import { Scopes, acquireToken, msalInstance } from "@/auth/ms-oauth";
+import axios, { AxiosHeaders } from "axios";
 
 declare module "axios" {
 	/**
@@ -38,9 +39,28 @@ declare module "axios" {
 /**
  * https://learn.microsoft.com/zh-cn/graph/use-the-api
  */
-const request = axios.create({
+const http = axios.create({
 	baseURL: "https://graph.microsoft.com/v1.0",
 	timeout: 10000,
 });
 
-export default request;
+http.interceptors.request.use(
+	async (config) => {
+		const accessToken = await acquireToken();
+
+		if (accessToken) {
+			config.headers.Authorization = `Bearer ${accessToken}`;
+		} else {
+			throw new Error(`Can't get accessToken`);
+		}
+
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	},
+);
+
+http.interceptors.response.use((response) => response.data);
+
+export default http;

@@ -1,5 +1,5 @@
 import { launchWebAuthFlow } from "@/auth/chrome-identity";
-import { getSignInUrl } from "@/auth/ms-oauth";
+import { getSignInUrl, msalInstance } from "@/auth/ms-oauth";
 import { useMsal } from "@azure/msal-react";
 import { Button } from "@nextui-org/react";
 
@@ -7,14 +7,16 @@ import { Button } from "@nextui-org/react";
  * popup login
  */
 const SignInButton = () => {
-	const { inProgress } = useMsal();
+	const { inProgress, instance } = useMsal();
 
 	const handleSignIn = async () => {
 		const url = await getSignInUrl();
 
-		const result = await launchWebAuthFlow(url);
+		const authInfo = await launchWebAuthFlow(url);
 
-		console.log("result>>", result);
+		if (authInfo?.account) {
+			instance.setActiveAccount(authInfo.account);
+		}
 	};
 
 	return (

@@ -1,14 +1,10 @@
-import {
-	LogLevel,
-	PublicClientApplication,
-	SilentRequest,
-} from "@azure/msal-browser";
-import { RedirectUri } from "./chrome-identity";
+import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
+import { RedirectUri, launchWebAuthFlow } from "./chrome-identity";
 
 /**
  * https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-auth-code-flow
  */
-export const MSAuthUrl = "https://login.microsoftonline.com";
+export const MSAuthUrl = "https://login.microsoftonline.com/consumers";
 
 export const TenantId = "057ab151-e7cd-45a5-8655-4303bf366831";
 
@@ -37,6 +33,7 @@ export const msalInstance = new PublicClientApplication({
 		storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
 	},
 	system: {
+		iframeHashTimeout: 20000,
 		loggerOptions: {
 			loggerCallback: (level, message, containsPii) => {
 				if (containsPii) {
@@ -95,7 +92,7 @@ export const getSignOutUrl = async () => {
 };
 
 async function getAcquireTokenUrl() {
-	return new Promise((resolve, reject) => {
+	return new Promise<string>((resolve, reject) => {
 		msalInstance
 			.acquireTokenRedirect({
 				scopes: Scopes,
@@ -112,10 +109,27 @@ async function getAcquireTokenUrl() {
  * 获取
  */
 export const acquireToken = async () => {
-	const res = await msalInstance.acquireTokenSilent({
-		scopes: Scopes,
-		account: msalInstance.getAllAccounts()[0],
-	});
+	const account = msalInstance.getActiveAccount();
 
-	return res?.accessToken;
+	if (!account) {
+		throw Error(
+			"No active account! Verify a user has been signed in and setActiveAccount has been called.",
+		);
+	}
+
+	try {
+		const res = await msalInstance.acquireTokenSilent({
+			scopes: Scopes,
+			account,
+		});
+
+		return res?.accessToken;
+	} catch (error) {
+		console.error(error);
+		const acquireTokenUrl = await getAcquireTokenUrl();
+
+		launchWebAuthFlow(acquireTokenUrl);
+
+		return null;
+	}
 };

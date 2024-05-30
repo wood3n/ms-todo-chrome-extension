@@ -1,3 +1,4 @@
+import { msalInstance } from "@/auth/ms-oauth";
 import {
 	type AuthenticationResult,
 	type EventMessage,
@@ -7,13 +8,12 @@ import { MsalProvider } from "@azure/msal-react";
 import { NextUIProvider } from "@nextui-org/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "whatwg-fetch";
-import { msalInstance } from "@/auth/ms-oauth";
 import App from "./App";
+import "./background";
 
 msalInstance.initialize().then(() => {
-	// Account selection logic is app dependent. Adjust as needed for different use cases.
 	const accounts = msalInstance.getAllAccounts();
+
 	if (accounts.length > 0) {
 		msalInstance.setActiveAccount(accounts[0]);
 	}
@@ -29,6 +29,7 @@ msalInstance.initialize().then(() => {
 	const root = ReactDOM.createRoot(
 		document.getElementById("root") as HTMLElement,
 	);
+
 	root.render(
 		<React.StrictMode>
 			<NextUIProvider>
