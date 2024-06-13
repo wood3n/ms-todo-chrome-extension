@@ -11,6 +11,9 @@ dependencies:
   '@azure/msal-react':
     specifier: ^2.0.16
     version: 2.0.16(@azure/msal-browser@3.14.0)(react@18.3.1)
+  '@icon-park/react':
+    specifier: ^1.4.2
+    version: 1.4.2(react-dom@18.3.1)(react@18.3.1)
   '@nextui-org/react':
     specifier: ^2.3.6
     version: 2.3.6(@types/react@18.3.1)(framer-motion@11.1.8)(react-dom@18.3.1)(react@18.3.1)(tailwind-variants@0.2.1)(tailwindcss@3.4.3)
@@ -434,6 +437,17 @@ packages:
     resolution: {integrity: sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@icon-park/react@1.4.2(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-+MtQLjNiRuia3fC/NfpSCTIy5KH5b+NkMB9zYd7p3R4aAIK61AjK0OSraaICJdkKooU9jpzk8m0fY4g9A3JqhQ==}
+    engines: {node: '>= 8.0.0', npm: '>= 5.0.0'}
+    peerDependencies:
+      react: '>=16.9'
+      react-dom: '>=16.9'
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /@internationalized/date@3.5.3:

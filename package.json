@@ -10,6 +10,7 @@
   "dependencies": {
     "@azure/msal-browser": "^3.14.0",
     "@azure/msal-react": "^2.0.16",
+    "@icon-park/react": "^1.4.2",
     "@nextui-org/react": "^2.3.6",
     "ahooks": "^3.8.0",
     "axios": "^1.6.8",

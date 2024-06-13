@@ -32,7 +32,7 @@ msalInstance.initialize().then(() => {
 
 	root.render(
 		<React.StrictMode>
-			<NextUIProvider>
+			<NextUIProvider className="h-full">
 				<MsalProvider instance={msalInstance}>
 					<App />
 				</MsalProvider>

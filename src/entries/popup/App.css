@@ -6,3 +6,8 @@ body {
   width: 480px;
   height: 600px;
 }
+
+#root {
+  height: 100%;
+  width: 1005;
+}
