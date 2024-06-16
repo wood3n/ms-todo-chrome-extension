@@ -1,68 +1,39 @@
-import { getTodoList } from "@/api/todolist";
-import { getUser, getUserAvatar } from "@/api/user";
-import Drawer from "@/components/drawer";
 import SignInButton from "@/components/signin-button";
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { SettingConfig } from "@icon-park/react";
-import { Button, Card, CardBody, Modal, User } from "@nextui-org/react";
-import { useRequest } from "ahooks";
+import { useTodoList, useUser } from "@/context";
+import { useMsal } from "@azure/msal-react";
+import { NextUIProvider } from "@nextui-org/react";
+import { ErrorBoundary } from "react-error-boundary";
+import Home from "./home";
 
-import "./App.css";
-import SignOutButton from "@/components/signout-button";
-import { useState } from "react";
+import "./background";
+import "./app.css";
+import { useEffect } from "react";
 
 const App = () => {
-	const isAuthenticated = useIsAuthenticated();
 	const msalInstance = useMsal();
 	const acount = msalInstance.instance.getActiveAccount();
 
-	const { data } = useRequest(getTodoList);
+	const fetchUser = useUser((state) => state.fetchUser);
+	const fetchTodoList = useTodoList((state) => state.fetchTodoList);
 
-	const { data: user } = useRequest(getUser);
+	useEffect(() => {
+		if (acount) {
+			fetchUser();
 
-	const { data: avatarUrl } = useRequest(async () => {
-		const res = await getUserAvatar();
+			fetchTodoList();
+		}
+	}, [acount, fetchUser, fetchTodoList]);
 
-		console.log(res);
-
-		const url = URL.createObjectURL(res);
-
-		console.log(url);
-
-		return url;
-	});
-
-	const [open, setOpen] = useState(false);
-
-	console.log(acount);
+	if (!acount) {
+		return <SignInButton />;
+	}
 
 	return (
-		<Card radius="none" className="h-full">
-			<CardBody>
-				<Button isIconOnly size="sm" onClick={() => setOpen(true)}>
-					<SettingConfig theme="outline" size={18} fill="#333" />
-				</Button>
-			</CardBody>
-			<Drawer
-				isOpen={open}
-				onClose={() => setOpen(false)}
-				onOpenChange={setOpen}
-			>
-				<div className="flex items-center">
-					<User
-						name={
-							navigator.language.includes("zh")
-								? `${user?.surname || ""}${user?.givenName || ""}`
-								: user?.displayName
-						}
-						description={user?.mail}
-						avatarProps={{
-							src: avatarUrl,
-						}}
-					/>
-				</div>
-			</Drawer>
-		</Card>
+		<NextUIProvider className="w-full h-full">
+			<ErrorBoundary fallback={<div>Something went wrong</div>}>
+				<Home />
+			</ErrorBoundary>
+		</NextUIProvider>
 	);
 };
 

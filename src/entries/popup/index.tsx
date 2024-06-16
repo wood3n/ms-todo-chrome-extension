@@ -5,11 +5,8 @@ import {
 	EventType,
 } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
-import { NextUIProvider } from "@nextui-org/react";
-import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./background";
+import App from "./app";
 
 msalInstance.initialize().then(() => {
 	const accounts = msalInstance.getAllAccounts();
@@ -31,12 +28,8 @@ msalInstance.initialize().then(() => {
 	);
 
 	root.render(
-		<React.StrictMode>
-			<NextUIProvider className="h-full">
-				<MsalProvider instance={msalInstance}>
-					<App />
-				</MsalProvider>
-			</NextUIProvider>
-		</React.StrictMode>,
+		<MsalProvider instance={msalInstance}>
+			<App />
+		</MsalProvider>,
 	);
 });

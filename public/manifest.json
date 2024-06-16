@@ -7,9 +7,10 @@
 	"action": {
 		"default_popup": "popup.html",
 		"default_icon": {
-			"16": "icon16.png",
-			"48": "icon48.png",
-			"128": "icon128.png"
+			"16": "extension_icon@16px.png",
+			"32": "extension_icon@32px.png",
+			"48": "extension_icon@48px.png",
+			"128": "extension_icon@128px.png"
 		},
 		"default_title": "点击打开面板"
 	},
@@ -18,6 +19,12 @@
 		"type": "module"
 	},
 	"permissions": ["identity", "contextMenus", "storage", "notifications"],
+	"icons": {
+		"16": "extension_icon@16px.png",
+		"32": "extension_icon@32px.png",
+		"48": "extension_icon@48px.png",
+		"128": "extension_icon@128px.png"
+	},
 	"host_permissions": [
 		"https://login.microsoftonline.com/*",
 		"https://graph.microsoft.com/v1.0/me/*"

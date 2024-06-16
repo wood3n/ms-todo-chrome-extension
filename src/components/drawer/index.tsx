@@ -57,11 +57,11 @@ const Drawer = ({ isOpen, onClose, onOpenChange, children }: Props) => {
 			<ModalContent>
 				<Card radius="none" className="flex-1" shadow="none">
 					<CardHeader className="flex gap-3">
-						<Button size="sm" isIconOnly onClick={onClose}>
+						<Button size="sm" isIconOnly variant="light" onClick={onClose}>
 							<MenuUnfoldOne theme="outline" size={18} fill="#333" />
 						</Button>
 					</CardHeader>
-					<CardBody>{children}</CardBody>
+					<CardBody className="block">{children}</CardBody>
 				</Card>
 			</ModalContent>
 		</Modal>

@@ -10,14 +10,19 @@
   "dependencies": {
     "@azure/msal-browser": "^3.14.0",
     "@azure/msal-react": "^2.0.16",
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@icon-park/react": "^1.4.2",
     "@nextui-org/react": "^2.3.6",
     "ahooks": "^3.8.0",
     "axios": "^1.6.8",
+    "emoji-mart": "^5.6.0",
     "framer-motion": "^11.1.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "whatwg-fetch": "^3.6.20"
+    "react-error-boundary": "^4.0.13",
+    "whatwg-fetch": "^3.6.20",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",

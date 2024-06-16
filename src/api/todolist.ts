@@ -1,7 +1,7 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import request from "./request";
 
-export interface Todo {
+export interface TodoResponse {
 	value: TodoTaskList[];
 }
 
@@ -9,7 +9,8 @@ export interface TodoData {
 	displayName: TodoTaskList["displayName"];
 }
 
-export const getTodoList = () => request.get<Todo>("/me/todo/lists");
+/** 获取任务列表 */
+export const getTodoList = () => request.get<TodoResponse>("/me/todo/lists");
 
 export const createTodoList = (data: TodoData) =>
 	request.post<TodoTaskList>("/me/todo/lists", data);
