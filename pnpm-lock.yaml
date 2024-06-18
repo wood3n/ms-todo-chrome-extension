@@ -29,6 +29,9 @@ dependencies:
   axios:
     specifier: ^1.6.8
     version: 1.6.8
+  classnames:
+    specifier: ^2.5.1
+    version: 2.5.1
   emoji-mart:
     specifier: ^5.6.0
     version: 5.6.0
@@ -3567,6 +3570,10 @@ packages:
   /chrome-types@0.1.282:
     resolution: {integrity: sha512-gG0mUvPZAwzYGVK6EJLt4dgfL21FAf+kZu4Y2oOedAfzI6u4svLdAnw0GK6kPo1VNqThZ/LlwjGzqXglb+TS6g==}
     dev: true
+
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+    dev: false
 
   /clsx@1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}

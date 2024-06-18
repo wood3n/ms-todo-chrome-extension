@@ -1,6 +1,12 @@
 import { useTodoList } from "@/context";
 import { List as ListIcon, Pin as PinIcon } from "@icon-park/react";
-import { Listbox, ListboxItem, ScrollShadow, User } from "@nextui-org/react";
+import {
+	Listbox,
+	ListboxItem,
+	ListboxSection,
+	ScrollShadow,
+} from "@nextui-org/react";
+import clx from "classnames";
 import { useEffect, useState } from "react";
 import UserCard from "../user-card";
 import CreateTodoList from "./create";
@@ -19,6 +25,11 @@ const TodoList = () => {
 	if (!todos?.length) {
 		return;
 	}
+
+	const defaultTodos = todos.filter(
+		(item) => item.wellknownListName === "defaultList",
+	);
+	const customTodos = todos.filter((item) => item.wellknownListName === "none");
 
 	return (
 		<div className="h-full flex flex-col items-start">
@@ -39,17 +50,48 @@ const TodoList = () => {
 						setSelectedKeys(keys as Set<string>);
 					}}
 				>
-					{todos.map((item) => (
-						<ListboxItem
-							key={item.id as string}
-							startContent={<ListIcon theme="outline" size={14} fill="#333" />}
-							selectedIcon={({ isSelected }) =>
-								isSelected && <PinIcon theme="outline" size={14} fill="#333" />
-							}
-						>
-							{item.displayName}
-						</ListboxItem>
-					))}
+					<ListboxSection showDivider>
+						{defaultTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								startContent={
+									<ListIcon theme="outline" size={14} fill="#333" />
+								}
+								selectedIcon={({ isSelected }) =>
+									isSelected && (
+										<PinIcon theme="outline" size={14} fill="#333" />
+									)
+								}
+								shouldHighlightOnFocus={false}
+								className={clx("hover:bg-blue-300", {
+									"bg-blue-300": selectedKeys?.has(item.id as string),
+								})}
+							>
+								{item.displayName}
+							</ListboxItem>
+						))}
+					</ListboxSection>
+					<ListboxSection>
+						{customTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								startContent={
+									<ListIcon theme="outline" size={14} fill="#333" />
+								}
+								selectedIcon={({ isSelected }) =>
+									isSelected && (
+										<PinIcon theme="outline" size={14} fill="#333" />
+									)
+								}
+								shouldHighlightOnFocus={false}
+								className={clx("hover:bg-blue-300", {
+									"bg-blue-300": selectedKeys?.has(item.id as string),
+								})}
+							>
+								{item.displayName}
+							</ListboxItem>
+						))}
+					</ListboxSection>
 				</Listbox>
 			</ScrollShadow>
 		</div>

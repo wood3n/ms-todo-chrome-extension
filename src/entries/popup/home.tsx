@@ -1,3 +1,4 @@
+import TodoIcon from "@/assets/microsoft-todo.svg?react";
 import Drawer from "@/components/drawer";
 import TodoTaskList from "@/components/task-list";
 import TodoList from "@/components/todo-list";
@@ -9,28 +10,37 @@ const Home = () => {
 	const [open, setOpen] = useState(false);
 
 	return (
-		<Card radius="none" className="h-full">
-			<CardHeader>
-				<Button
-					isIconOnly
-					variant="light"
-					size="sm"
-					onClick={() => setOpen(true)}
+		<main className="h-full">
+			<Card radius="none" className="h-full">
+				<CardHeader className="justify-between">
+					<Button
+						isIconOnly
+						variant="light"
+						size="sm"
+						onClick={() => setOpen(true)}
+					>
+						<SettingConfig
+							theme="outline"
+							size={18}
+							className="dark:text-white"
+						/>
+					</Button>
+					<div>
+						<TodoIcon style={{ width: 32, height: 32 }} />
+					</div>
+				</CardHeader>
+				<CardBody>
+					<TodoTaskList />
+				</CardBody>
+				<Drawer
+					isOpen={open}
+					onClose={() => setOpen(false)}
+					onOpenChange={setOpen}
 				>
-					<SettingConfig theme="outline" size={18} fill="#333" />
-				</Button>
-			</CardHeader>
-			<CardBody>
-				<TodoTaskList />
-			</CardBody>
-			<Drawer
-				isOpen={open}
-				onClose={() => setOpen(false)}
-				onOpenChange={setOpen}
-			>
-				<TodoList />
-			</Drawer>
-		</Card>
+					<TodoList />
+				</Drawer>
+			</Card>
+		</main>
 	);
 };
 
