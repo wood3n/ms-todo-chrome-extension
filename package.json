@@ -13,6 +13,7 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@icon-park/react": "^1.4.2",
+    "@internationalized/date": "^3.5.4",
     "@nextui-org/react": "^2.3.6",
     "ahooks": "^3.8.0",
     "axios": "^1.6.8",

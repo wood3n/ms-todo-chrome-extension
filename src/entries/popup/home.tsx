@@ -1,5 +1,6 @@
 import TodoIcon from "@/assets/microsoft-todo.svg?react";
 import Drawer from "@/components/drawer";
+import LocalDate from "@/components/local-date";
 import TodoTaskList from "@/components/task-list";
 import TodoList from "@/components/todo-list";
 import { SettingConfig } from "@icon-park/react";
@@ -26,7 +27,7 @@ const Home = () => {
 						/>
 					</Button>
 					<div>
-						<TodoIcon style={{ width: 32, height: 32 }} />
+						<LocalDate />
 					</div>
 				</CardHeader>
 				<CardBody>

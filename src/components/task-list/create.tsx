@@ -19,20 +19,22 @@ const CreateTask: React.FC<Props> = ({ todoListId, afterCreate }) => {
 
 	const handlePressEnter: React.KeyboardEventHandler<HTMLInputElement> = (
 		e,
-	) => {};
+	) => {
+		if (e.key === "Enter") {
+			submit();
+		}
+	};
 
 	return (
-		<div className="w-full flex items-center gap-x-2">
+		<div className="w-full pb-4 flex items-center gap-x-2">
 			<Input
 				value={value}
 				onChange={(e) => setValue(e.target.value)}
-				endContent={<Kbd keys={["enter"]} />}
-				placeholder="添加任务列表"
+				startContent={<AddTwoIcon theme="outline" size="16" fill="#333" />}
+				endContent={<Kbd keys={["enter"]} className="" />}
+				placeholder="添加任务"
 				onKeyDown={handlePressEnter}
 			/>
-			<Button isIconOnly color="primary" variant="flat" onClick={submit}>
-				<AddTwoIcon theme="outline" size="16" fill="#333" />
-			</Button>
 		</div>
 	);
 };
