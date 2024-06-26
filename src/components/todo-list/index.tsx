@@ -1,6 +1,4 @@
-import Spin from "@/components/spin";
 import { useTodoList } from "@/context";
-import { List as ListIcon, Pin as PinIcon } from "@icon-park/react";
 import {
 	Listbox,
 	ListboxItem,
@@ -8,20 +6,21 @@ import {
 	ScrollShadow,
 } from "@nextui-org/react";
 import clx from "classnames";
-import { useEffect, useState } from "react";
 import UserCard from "../user-card";
 import CreateTodoList from "./create";
+import ListItem from "./list-item";
+
+interface Props {
+	onClose: VoidFunction;
+}
 
 /** 任务列表 */
-const TodoList = () => {
-	const [selectedKeys, setSelectedKeys] = useState<Set<string>>();
+const TodoList = ({ onClose }: Props) => {
+	const [currentTodoData, changeCurrentTodoData] = useTodoList((state) => [
+		state.currentTodoData,
+		state.changeCurrentTodo,
+	]);
 	const todos = useTodoList((state) => state.todoList);
-
-	useEffect(() => {
-		const selectedKey = todos?.find((item) => item.pinned)?.id as string;
-
-		setSelectedKeys(new Set([selectedKey]));
-	}, [todos]);
 
 	if (!todos?.length) {
 		return;
@@ -36,67 +35,58 @@ const TodoList = () => {
 		<div className="h-full flex flex-col items-start">
 			<UserCard />
 			<CreateTodoList />
-			<Spin className="w-full flex-1">
-				<ScrollShadow hideScrollBar className="overflow-auto ">
-					<Listbox
-						aria-label="任务分类列表"
-						onAction={(key) => alert(key)}
-						className="p-0 rounded-none"
-						itemClasses={{
-							base: "px-4 gap-4 h-12",
-						}}
-						selectionMode="single"
-						items={todos}
-						selectedKeys={selectedKeys}
-						onSelectionChange={(keys) => {
-							setSelectedKeys(keys as Set<string>);
-						}}
-					>
-						<ListboxSection showDivider>
-							{defaultTodos.map((item) => (
-								<ListboxItem
-									key={item.id as string}
-									startContent={
-										<ListIcon theme="outline" size={14} fill="#333" />
-									}
-									selectedIcon={({ isSelected }) =>
-										isSelected && (
-											<PinIcon theme="outline" size={14} fill="#333" />
-										)
-									}
-									shouldHighlightOnFocus={false}
-									className={clx("hover:bg-blue-300", {
-										"bg-blue-200": selectedKeys?.has(item.id as string),
-									})}
-								>
-									{item.displayName}
-								</ListboxItem>
-							))}
-						</ListboxSection>
-						<ListboxSection>
-							{customTodos.map((item) => (
-								<ListboxItem
-									key={item.id as string}
-									startContent={
-										<ListIcon theme="outline" size={14} fill="#333" />
-									}
-									selectedIcon={({ isSelected }) =>
-										isSelected && (
-											<PinIcon theme="outline" size={14} fill="#333" />
-										)
-									}
-									shouldHighlightOnFocus={false}
-									className={clx("hover:bg-blue-300", {
-										"bg-blue-300": selectedKeys?.has(item.id as string),
-									})}
-								>
-									{item.displayName}
-								</ListboxItem>
-							))}
-						</ListboxSection>
-					</Listbox>
-				</ScrollShadow>
-			</Spin>
+			<ScrollShadow hideScrollBar className="w-full overflow-auto">
+				<Listbox
+					aria-label="任务分类列表"
+					onAction={(key) => alert(key)}
+					className="p-0 rounded-none"
+					itemClasses={{
+						base: "px-4 gap-4 h-12",
+					}}
+					selectionMode="single"
+					items={todos}
+					selectedKeys={
+						currentTodoData.id ? new Set([currentTodoData.id]) : undefined
+					}
+					onSelectionChange={(keys) => {
+						changeCurrentTodoData([...keys][0] as string);
+						onClose();
+					}}
+				>
+					<ListboxSection showDivider>
+						{defaultTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								hideSelectedIcon
+								className={clx({
+									"bg-blue-200": currentTodoData.id === item.id,
+								})}
+								classNames={{
+									title: "inline-block h-full",
+								}}
+							>
+								<ListItem>{item.displayName}</ListItem>
+							</ListboxItem>
+						))}
+					</ListboxSection>
+					<ListboxSection>
+						{customTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								hideSelectedIcon
+								className={clx("hover:bg-blue-300", {
+									"bg-blue-300": currentTodoData.id === item.id,
+								})}
+								classNames={{
+									title: "inline-block h-full",
+								}}
+							>
+								<ListItem>{item.displayName}</ListItem>
+							</ListboxItem>
+						))}
+					</ListboxSection>
+				</Listbox>
+			</ScrollShadow>
 		</div>
 	);
 };

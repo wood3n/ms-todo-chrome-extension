@@ -1,18 +1,18 @@
 import { createTask } from "@/api";
 import { AddTwo as AddTwoIcon } from "@icon-park/react";
-import { Button, Input, Kbd } from "@nextui-org/react";
+import { Input, Kbd } from "@nextui-org/react";
 import { useState } from "react";
 
 interface Props {
-	todoListId: string;
+	todoId: string;
 	afterCreate: VoidFunction;
 }
 
-const CreateTask: React.FC<Props> = ({ todoListId, afterCreate }) => {
+const CreateTask: React.FC<Props> = ({ todoId, afterCreate }) => {
 	const [value, setValue] = useState<string>();
 
 	const submit = async () => {
-		await createTask(todoListId, { title: value });
+		await createTask(todoId, { title: value });
 		setValue(undefined);
 		afterCreate();
 	};

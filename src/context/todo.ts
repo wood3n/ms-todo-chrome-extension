@@ -8,14 +8,17 @@ export interface TodoListDataType extends TodoTaskList {
 }
 
 export interface TodoListState {
-	todoList?: TodoListDataType[];
+	todoList: TodoListDataType[];
+	currentTodoData: TodoListDataType;
 	fetchTodoList: () => Promise<void>;
 	addTodo: (displayName: string) => Promise<TodoTaskList>;
 	deleteTodo: (id: string) => Promise<void>;
+	changeCurrentTodo: (id: string) => void;
 }
 
 export const useTodoList = create<TodoListState>()((set, get) => ({
 	todoList: [],
+	currentTodoData: {},
 	fetchTodoList: async () => {
 		const response = await getTodoList();
 
@@ -30,12 +33,11 @@ export const useTodoList = create<TodoListState>()((set, get) => ({
 			pinned: item.id === options.pinnedTodoListId,
 		}));
 
-		if (todoList.some((item) => item.pinned)) {
-			set({ todoList });
-		} else {
+		if (!todoList.some((item) => item.pinned)) {
 			todoList[0].pinned = true;
-			set({ todoList });
 		}
+
+		set({ todoList, currentTodoData: todoList.find((item) => item.pinned) });
 	},
 	addTodo: async (displayName: string) => {
 		const newTodo = await createTodoList({ displayName });
@@ -48,5 +50,10 @@ export const useTodoList = create<TodoListState>()((set, get) => ({
 		await deleteTodoList(id);
 
 		get().fetchTodoList();
+	},
+	changeCurrentTodo: (id: string) => {
+		const todoList = get().todoList;
+
+		set({ currentTodoData: todoList.find((item) => item.id === id) });
 	},
 }));
