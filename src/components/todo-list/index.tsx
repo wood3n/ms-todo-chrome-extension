@@ -1,30 +1,41 @@
 import { useTodoList } from "@/context";
-import { List as ListIcon, Pin as PinIcon } from "@icon-park/react";
-import { Listbox, ListboxItem, ScrollShadow, User } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import {
+	Listbox,
+	ListboxItem,
+	ListboxSection,
+	ScrollShadow,
+} from "@nextui-org/react";
+import clx from "classnames";
 import UserCard from "../user-card";
 import CreateTodoList from "./create";
+import ListItem from "./list-item";
+
+interface Props {
+	onClose: VoidFunction;
+}
 
 /** 任务列表 */
-const TodoList = () => {
-	const [selectedKeys, setSelectedKeys] = useState<Set<string>>();
+const TodoList = ({ onClose }: Props) => {
+	const [currentTodoData, changeCurrentTodoData] = useTodoList((state) => [
+		state.currentTodoData,
+		state.changeCurrentTodo,
+	]);
 	const todos = useTodoList((state) => state.todoList);
-
-	useEffect(() => {
-		const selectedKey = todos?.find((item) => item.pinned)?.id as string;
-
-		setSelectedKeys(new Set([selectedKey]));
-	}, [todos]);
 
 	if (!todos?.length) {
 		return;
 	}
 
+	const defaultTodos = todos.filter(
+		(item) => item.wellknownListName === "defaultList",
+	);
+	const customTodos = todos.filter((item) => item.wellknownListName === "none");
+
 	return (
 		<div className="h-full flex flex-col items-start">
 			<UserCard />
 			<CreateTodoList />
-			<ScrollShadow hideScrollBar className="flex-1 overflow-auto w-full">
+			<ScrollShadow hideScrollBar className="w-full overflow-auto">
 				<Listbox
 					aria-label="任务分类列表"
 					onAction={(key) => alert(key)}
@@ -34,22 +45,46 @@ const TodoList = () => {
 					}}
 					selectionMode="single"
 					items={todos}
-					selectedKeys={selectedKeys}
+					selectedKeys={
+						currentTodoData.id ? new Set([currentTodoData.id]) : undefined
+					}
 					onSelectionChange={(keys) => {
-						setSelectedKeys(keys as Set<string>);
+						changeCurrentTodoData([...keys][0] as string);
+						onClose();
 					}}
 				>
-					{todos.map((item) => (
-						<ListboxItem
-							key={item.id as string}
-							startContent={<ListIcon theme="outline" size={14} fill="#333" />}
-							selectedIcon={({ isSelected }) =>
-								isSelected && <PinIcon theme="outline" size={14} fill="#333" />
-							}
-						>
-							{item.displayName}
-						</ListboxItem>
-					))}
+					<ListboxSection showDivider>
+						{defaultTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								hideSelectedIcon
+								className={clx({
+									"bg-blue-200": currentTodoData.id === item.id,
+								})}
+								classNames={{
+									title: "inline-block h-full",
+								}}
+							>
+								<ListItem>{item.displayName}</ListItem>
+							</ListboxItem>
+						))}
+					</ListboxSection>
+					<ListboxSection>
+						{customTodos.map((item) => (
+							<ListboxItem
+								key={item.id as string}
+								hideSelectedIcon
+								className={clx("hover:bg-blue-300", {
+									"bg-blue-300": currentTodoData.id === item.id,
+								})}
+								classNames={{
+									title: "inline-block h-full",
+								}}
+							>
+								<ListItem>{item.displayName}</ListItem>
+							</ListboxItem>
+						))}
+					</ListboxSection>
 				</Listbox>
 			</ScrollShadow>
 		</div>

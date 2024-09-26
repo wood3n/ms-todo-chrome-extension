@@ -29,7 +29,7 @@ const App = () => {
 	}
 
 	return (
-		<NextUIProvider className="w-full h-full">
+		<NextUIProvider locale={navigator.language} className="w-full h-full">
 			<ErrorBoundary fallback={<div>Something went wrong</div>}>
 				<Home />
 			</ErrorBoundary>
