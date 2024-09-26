@@ -8,17 +8,10 @@
 // Add a listener to create the initial context menu items,
 // context menu items only need to be created at runtime.onInstalled
 chrome.runtime.onInstalled.addListener(async () => {
-	chrome.contextMenus.create({
-		id: "add",
-		title: "添加到Todo",
-		type: "normal",
-		contexts: ["selection"],
-	});
-});
-
-// Open a new search tab when the user clicks a context menu
-chrome.contextMenus.onClicked.addListener((item, tab) => {
-	const tld = item.menuItemId;
-	// TOOD:调用 TODO api 添加任务
-	alert("添加到Todo");
+  chrome.contextMenus.create({
+    id: "add",
+    title: "添加到Todo",
+    type: "normal",
+    contexts: ["selection"],
+  });
 });

@@ -6,24 +6,20 @@ import { Button } from "@nextui-org/react";
 /**
  * popup login
  */
-const SignOutButton = () => {
-	const { inProgress } = useMsal();
+function SignOutButton() {
+  const { inProgress } = useMsal();
 
-	const handleSignOut = async () => {
-		const logoutUrl = await getSignOutUrl();
+  const handleSignOut = async () => {
+    const logoutUrl = await getSignOutUrl();
 
-		await launchWebAuthFlow(logoutUrl);
-	};
+    await launchWebAuthFlow(logoutUrl);
+  };
 
-	return (
-		<Button
-			color="primary"
-			isLoading={inProgress === "logout"}
-			onClick={handleSignOut}
-		>
-			退出登录
-		</Button>
-	);
-};
+  return (
+    <Button color="primary" isLoading={inProgress === "logout"} onClick={handleSignOut}>
+      退出登录
+    </Button>
+  );
+}
 
 export default SignOutButton;

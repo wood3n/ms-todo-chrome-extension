@@ -1,14 +1,11 @@
 export enum StorageKey {
-	Option = "extension_options",
+  Option = "extension_options",
 }
 
-export const storageSet = async (
-	data: Record<StorageKey, unknown>,
-	cb?: VoidFunction,
-) => {
-	return chrome.storage.local.set(data, cb);
-};
+export async function storageSet(data: Record<StorageKey, unknown>, cb?: VoidFunction) {
+  return chrome.storage.local.set(data, cb);
+}
 
-export const storageGet = async (key: StorageKey) => {
-	return chrome.storage.local.get(key);
-};
+export async function storageGet(key: StorageKey) {
+  return chrome.storage.local.get(key);
+}

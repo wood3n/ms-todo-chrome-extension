@@ -1,32 +1,29 @@
 {
-	"manifest_version": 3,
-	"name": "Microsoft Todo App Chrome Extension",
-	"description": "Microsoft Todo App Chrome Extension",
-	"version": "1.0",
-	"options_page": "option.html",
-	"action": {
-		"default_popup": "popup.html",
-		"default_icon": {
-			"16": "extension_icon@16px.png",
-			"32": "extension_icon@32px.png",
-			"48": "extension_icon@48px.png",
-			"128": "extension_icon@128px.png"
-		},
-		"default_title": "点击打开面板"
-	},
-	"background": {
-		"service_worker": "background.js",
-		"type": "module"
-	},
-	"permissions": ["identity", "contextMenus", "storage", "notifications"],
-	"icons": {
-		"16": "extension_icon@16px.png",
-		"32": "extension_icon@32px.png",
-		"48": "extension_icon@48px.png",
-		"128": "extension_icon@128px.png"
-	},
-	"host_permissions": [
-		"https://login.microsoftonline.com/*",
-		"https://graph.microsoft.com/v1.0/me/*"
-	]
+  "manifest_version": 3,
+  "name": "Microsoft Todo App Chrome Extension",
+  "description": "Microsoft Todo App Chrome Extension",
+  "version": "1.0",
+  "options_page": "option.html",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "extension_icon@16px.png",
+      "32": "extension_icon@32px.png",
+      "48": "extension_icon@48px.png",
+      "128": "extension_icon@128px.png"
+    },
+    "default_title": "点击打开面板"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["identity", "contextMenus", "storage", "notifications"],
+  "icons": {
+    "16": "extension_icon@16px.png",
+    "32": "extension_icon@32px.png",
+    "48": "extension_icon@48px.png",
+    "128": "extension_icon@128px.png"
+  },
+  "host_permissions": ["https://login.microsoftonline.com/*", "https://graph.microsoft.com/v1.0/me/*"]
 }
