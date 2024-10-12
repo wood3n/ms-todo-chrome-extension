@@ -10,3 +10,7 @@ export function getLocalDate() {
   // 格式化当前日期和时间
   return formatter.format(now);
 }
+
+export function convertUTCToLocalTime(utcDateString: string) {
+  return new Date(utcDateString).toLocaleString();
+}

@@ -1,7 +1,8 @@
-import { launchWebAuthFlow } from "@/auth/chrome-identity";
-import { getSignInUrl } from "@/auth/ms-oauth";
 import { useMsal } from "@azure/msal-react";
 import { Button } from "@nextui-org/react";
+
+import { launchWebAuthFlow } from "@/auth/chrome-identity";
+import { getSignInUrl } from "@/auth/ms-oauth";
 
 /**
  * popup login

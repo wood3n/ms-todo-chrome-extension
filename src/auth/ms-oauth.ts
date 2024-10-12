@@ -1,4 +1,5 @@
 import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
+
 import { launchWebAuthFlow, RedirectUri } from "./chrome-identity";
 
 /**

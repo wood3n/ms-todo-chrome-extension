@@ -1,12 +1,12 @@
+import { useEffect } from "react";
+
+import { useMsal } from "@azure/msal-react";
+
 import SignInButton from "@/components/signin-button";
 import { useTodoList, useUser } from "@/context";
-import { useMsal } from "@azure/msal-react";
-import { NextUIProvider } from "@nextui-org/react";
-import { useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 
-import Home from "./home";
-import "./background";
+import Main from "./main";
+
 import "./app.css";
 
 function App() {
@@ -28,13 +28,7 @@ function App() {
     return <SignInButton />;
   }
 
-  return (
-    <NextUIProvider locale={navigator.language} className="w-full h-full">
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <Home />
-      </ErrorBoundary>
-    </NextUIProvider>
-  );
+  return <Main />;
 }
 
 export default App;

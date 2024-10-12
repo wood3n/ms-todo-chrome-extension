@@ -1,7 +1,9 @@
-import { createTask } from "@/api";
+import { useState } from "react";
+
 import { AddTwo as AddTwoIcon } from "@icon-park/react";
 import { Input, Kbd } from "@nextui-org/react";
-import { useState } from "react";
+
+import { createTask } from "@/api";
 
 interface Props {
   todoId: string;
@@ -24,7 +26,7 @@ const CreateTask: React.FC<Props> = ({ todoId, afterCreate }) => {
   };
 
   return (
-    <div className="w-full pb-4 flex items-center gap-x-2">
+    <div className="flex w-full items-center gap-x-2 pb-4">
       <Input
         value={value}
         onChange={e => setValue(e.target.value)}

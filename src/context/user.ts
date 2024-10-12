@@ -1,6 +1,7 @@
 import type { User } from "@microsoft/microsoft-graph-types";
-import { getUser, getUserAvatar } from "@/api";
 import { create } from "zustand";
+
+import { getUser, getUserAvatar } from "@/api";
 
 export interface UserInfo extends User {
   /** avatar url */

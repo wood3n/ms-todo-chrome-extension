@@ -1,7 +1,8 @@
+import { useState } from "react";
 import type React from "react";
+
 import { List as ListIcon, MoreTwo as MoreTwoIcon } from "@icon-park/react";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
-import { useState } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -11,9 +12,9 @@ const ListItem: React.FC<Props> = ({ children }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <div className="flex items-center h-8" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+    <div className="flex h-8 items-center" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <ListIcon theme="outline" size={14} fill="#333" />
-      <div className="flex-1 ml-4">{children}</div>
+      <div className="ml-4 flex-1">{children}</div>
       <div className="h-full">
         {hovered && (
           <Dropdown>

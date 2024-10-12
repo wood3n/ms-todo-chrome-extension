@@ -1,5 +1,7 @@
-import { acquireToken } from "@/auth/ms-oauth";
 import axios from "axios";
+import { setupCache } from "axios-cache-interceptor";
+
+import { acquireToken } from "@/auth/ms-oauth";
 
 declare module "axios" {
   /**
@@ -31,6 +33,8 @@ const http = axios.create({
   baseURL: "https://graph.microsoft.com/v1.0",
   timeout: 10000,
 });
+
+setupCache(http);
 
 http.interceptors.request.use(
   async (config) => {

@@ -1,6 +1,12 @@
-import antfu from "@antfu/eslint-config";
+import eslintConfig from "@antfu/eslint-config";
+import tailwind from "eslint-plugin-tailwindcss";
 
-export default antfu({
+export default eslintConfig({
+  languageOptions: {
+    globals: {
+      chrome: true,
+    },
+  },
   formatters: {
     css: false,
     html: true,
@@ -19,5 +25,44 @@ export default antfu({
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/method-signature-style": 0,
     "n/prefer-global/process": 0,
+    "no-unused-vars": 0,
+    "unused-imports/no-unused-imports": "error",
+    "antfu/top-level-function": 0,
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
+    "perfectionist/sort-imports": [
+      "error",
+      {
+        order: "asc",
+        internalPattern: ["@/**"],
+        groups: [
+          "react",
+          "type",
+          ["builtin", "builtin-type"],
+          ["external", "external-type"],
+          ["internal", "internal-type"],
+          ["index", "index-type", "sibling", "sibling-type", "parent", "parent-type"],
+          "side-effect",
+          ["style", "side-effect-style"],
+          "object",
+          "unknown",
+        ],
+        customGroups: {
+          value: {
+            react: ["react", "react-*", "typescript"],
+          },
+          type: {
+            react: ["react", "react-*"],
+          },
+        },
+      },
+    ],
   },
-});
+}, tailwind.configs["flat/recommended"]);

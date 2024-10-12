@@ -1,4 +1,5 @@
 import type { AuthenticationResult } from "@azure/msal-browser";
+
 import { msalInstance } from "./ms-oauth";
 
 /**

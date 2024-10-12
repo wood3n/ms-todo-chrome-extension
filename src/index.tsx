@@ -1,7 +1,12 @@
-import { msalInstance } from "@/auth/ms-oauth";
+import { ErrorBoundary } from "react-error-boundary";
+
 import { type AuthenticationResult, type EventMessage, EventType } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
+import { NextUIProvider } from "@nextui-org/react";
 import ReactDOM from "react-dom/client";
+
+import { msalInstance } from "@/auth/ms-oauth";
+
 import App from "./app";
 
 msalInstance.initialize().then(() => {
@@ -23,7 +28,11 @@ msalInstance.initialize().then(() => {
 
   root.render(
     <MsalProvider instance={msalInstance}>
-      <App />
+      <NextUIProvider locale={navigator.language} className="size-full">
+        <ErrorBoundary fallback={<div>Something went wrong</div>}>
+          <App />
+        </ErrorBoundary>
+      </NextUIProvider>
     </MsalProvider>,
   );
 });

@@ -1,8 +1,10 @@
+import { useState } from "react";
 import type React from "react";
-import { useTodoList } from "@/context";
+
 import { AddTwo as AddTwoIcon } from "@icon-park/react";
 import { Button, Input, Kbd } from "@nextui-org/react";
-import { useState } from "react";
+
+import { useTodoList } from "@/context";
 
 interface Props {
   className?: string;
@@ -26,7 +28,7 @@ const CreateTodoList: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <div className="w-full py-4 flex items-center gap-x-2">
+    <div className="flex w-full items-center gap-x-2 py-4">
       <Input
         value={value}
         onChange={e => setValue(e.target.value)}

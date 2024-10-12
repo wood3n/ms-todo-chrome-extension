@@ -1,13 +1,15 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
+import { create } from "zustand";
+
 import { createTodoList, deleteTodoList, getTodoList } from "@/api";
 import { storageGet, StorageKey } from "@/utils/storage";
-import { create } from "zustand";
 
 export interface TodoListDataType extends TodoTaskList {
   pinned?: boolean;
 }
 
 export interface TodoListState {
+  loading: boolean;
   todoList: TodoListDataType[];
   currentTodoData: TodoListDataType;
   fetchTodoList: () => Promise<void>;
@@ -17,25 +19,32 @@ export interface TodoListState {
 }
 
 export const useTodoList = create<TodoListState>()((set, get) => ({
+  loading: false,
   todoList: [],
   currentTodoData: {},
   fetchTodoList: async () => {
+    set({ loading: true });
     const response = await getTodoList();
 
-    const list = response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
+    try {
+      const list = response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
 
-    const options = await storageGet(StorageKey.Option);
+      const options = await storageGet(StorageKey.Option);
 
-    const todoList: TodoListDataType[] = list?.map(item => ({
-      ...item,
-      pinned: item.id === options.pinnedTodoListId,
-    }));
+      const todoList: TodoListDataType[] = list?.map(item => ({
+        ...item,
+        pinned: item.id === options.pinnedTodoListId,
+      }));
 
-    if (!todoList.some(item => item.pinned)) {
-      todoList[0].pinned = true;
+      if (!todoList.some(item => item.pinned)) {
+        todoList[0].pinned = true;
+      }
+
+      set({ todoList, currentTodoData: todoList.find(item => item.pinned) });
     }
-
-    set({ todoList, currentTodoData: todoList.find(item => item.pinned) });
+    finally {
+      set({ loading: false });
+    }
   },
   addTodo: async (displayName: string) => {
     const newTodo = await createTodoList({ displayName });

@@ -1,6 +1,8 @@
-import { useTodoList } from "@/context";
 import { Listbox, ListboxItem, ListboxSection, ScrollShadow } from "@nextui-org/react";
 import clx from "classnames";
+
+import { useTodoList } from "@/context";
+
 import UserCard from "../user-card";
 import CreateTodoList from "./create";
 import ListItem from "./list-item";
@@ -22,14 +24,14 @@ function TodoList({ onClose }: Props) {
   const customTodos = todos.filter(item => item.wellknownListName === "none");
 
   return (
-    <div className="h-full flex flex-col items-start">
+    <div className="flex h-full flex-col items-start">
       <UserCard />
       <CreateTodoList />
       <ScrollShadow hideScrollBar className="w-full overflow-auto">
         <Listbox
           aria-label="任务分类列表"
           onAction={key => alert(key)}
-          className="p-0 rounded-none"
+          className="rounded-none p-0"
           itemClasses={{
             base: "px-4 gap-4 h-12",
           }}
