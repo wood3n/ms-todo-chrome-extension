@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import type { TaskStatus } from "@microsoft/microsoft-graph-types";
-import { Card, CardBody, CardFooter, CardHeader, Checkbox, ScrollShadow, Tab, Tabs } from "@nextui-org/react";
+import type { TaskStatus, TodoTask } from "@microsoft/microsoft-graph-types";
+import { Card, CardBody, CardFooter, CardHeader, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Tab, Tabs, useDisclosure } from "@nextui-org/react";
 import { useRequest } from "ahooks";
 import classNames from "classnames";
 import SimpleBar from "simplebar-react";
@@ -10,6 +10,8 @@ import { getTaskList } from "@/api";
 import Spin from "@/components/spin";
 import { useTodoList } from "@/context";
 
+import TaskDetail from "../task/detail";
+import CreateTask from "./create";
 import TaskCardFooter from "./task-card-footer";
 
 import "simplebar-react/dist/simplebar.min.css";
@@ -21,6 +23,8 @@ interface Props {
 const TodoTaskList = ({ className }: Props) => {
   const todoData = useTodoList(state => state.currentTodoData);
   const [status, setStatus] = useState<TaskStatus>("inProgress");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [currentTask, setCurrentTask] = useState<TodoTask>();
 
   const tabs = [
     {
@@ -45,6 +49,7 @@ const TodoTaskList = ({ className }: Props) => {
 
   const {
     data: tasks,
+    refreshAsync,
     loading,
   } = useRequest(
     async () => {
@@ -100,7 +105,18 @@ const TodoTaskList = ({ className }: Props) => {
                 <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("p-2 h-full", scrollableNodeProps.className)}>
                   <div ref={contentNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("flex flex-col space-y-2", contentNodeProps.className)}>
                     {tasks.map(item => (
-                      <Card isHoverable isPressable allowTextSelectionOnPress key={item.id} shadow="sm" className="w-full overflow-x-hidden">
+                      <Card
+                        isHoverable
+                        isPressable
+                        allowTextSelectionOnPress
+                        key={item.id}
+                        shadow="sm"
+                        className="w-full overflow-x-hidden"
+                        onPress={() => {
+                          setCurrentTask(item);
+                          onOpen();
+                        }}
+                      >
                         <CardBody className="flex flex-row">
                           <div className="flex min-w-0 grow flex-col space-y-1">
                             <div className={classNames("truncate text-base", {
@@ -131,9 +147,27 @@ const TodoTaskList = ({ className }: Props) => {
           </SimpleBar>
         </Spin>
       </CardBody>
-      <CardFooter>
-        footer
-      </CardFooter>
+      {Boolean(todoData?.id) && (
+        <CardFooter className="flex-none">
+          <CreateTask todoId={todoData.id!} afterCreate={refreshAsync} />
+        </CardFooter>
+      )}
+      <Modal
+        isOpen={isOpen}
+        placement="center"
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader>任务信息</ModalHeader>
+              <ModalBody>
+                <TaskDetail data={currentTask} />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </Card>
   );
 };

@@ -1,23 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "Microsoft Todo App Chrome Extension",
+  "name": "Microsoft Todo",
   "description": "Microsoft Todo App Chrome Extension",
   "version": "1.0",
   "action": {
-    "default_popup": "index.html",
+    // "default_popup": "index.html",
     "default_icon": {
       "16": "extension_icon@16px.png",
       "32": "extension_icon@32px.png",
       "48": "extension_icon@48px.png",
       "128": "extension_icon@128px.png"
     },
-    "default_title": "点击打开面板"
+    "default_title": "点击打开Todo"
+  },
+  "side_panel": {
+    "default_path": "index.html"
   },
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": ["identity", "contextMenus", "storage", "notifications"],
+  "permissions": ["identity", "contextMenus", "storage", "notifications", "sidePanel"],
   "icons": {
     "16": "extension_icon@16px.png",
     "32": "extension_icon@32px.png",

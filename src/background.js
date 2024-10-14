@@ -15,3 +15,8 @@ chrome.runtime.onInstalled.addListener(async () => {
     contexts: ["selection"],
   });
 });
+
+/** open side panel */
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch(error => console.error(error));

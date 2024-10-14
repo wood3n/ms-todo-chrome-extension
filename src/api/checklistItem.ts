@@ -18,6 +18,7 @@ export interface Value {
   id?: string;
 }
 
+/** 获取任务的清单  */
 export function getChecklistItems({ todoTaskListId, todoTaskId, checklistItems }: { todoTaskListId: string; todoTaskId: string; checklistItems?: string }) {
   return request.get<ChecklistItems>(`/me/todo/lists/${todoTaskListId}/tasks/${todoTaskId}/checklistItems${checklistItems ? `/${checklistItems}` : ""}`);
 }
