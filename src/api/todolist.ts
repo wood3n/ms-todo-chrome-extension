@@ -1,6 +1,7 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 
-import request from "./request";
+import type { CommonQueryParams } from "./common";
+import http from "./request";
 
 export interface TodoResponse {
   value: TodoTaskList[];
@@ -11,16 +12,18 @@ export interface TodoData {
 }
 
 /** 获取任务列表 */
-export const getTodoList = () => request.get<TodoResponse>("/me/todo/lists");
+export const getTodoList = (params?: CommonQueryParams) => http.get<TodoResponse>("/me/todo/lists", {
+  params,
+});
 
 export function createTodoList(data: TodoData) {
-  return request.post<TodoTaskList>("/me/todo/lists", data);
+  return http.post<TodoTaskList>("/me/todo/lists", data);
 }
 
 export function updateTodoList(id: string, data: TodoData) {
-  return request.patch<TodoTaskList>(`/me/todo/lists/${id}`, data);
+  return http.patch<TodoTaskList>(`/me/todo/lists/${id}`, data);
 }
 
 export function deleteTodoList(id: string) {
-  return request.delete<void>(`/me/todo/lists/${id}`);
+  return http.delete<void>(`/me/todo/lists/${id}`);
 }

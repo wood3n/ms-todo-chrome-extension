@@ -24,16 +24,19 @@ export const useTodoList = create<TodoListState>()((set, get) => ({
   currentTodoData: {},
   fetchTodoList: async () => {
     set({ loading: true });
-    const response = await getTodoList();
+    const response = await getTodoList({
+      // i think people do not need to read so much task
+      $top: 100,
+    });
 
     try {
       const list = response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
 
-      const options = await storageGet(StorageKey.Option);
+      const pinnedTodoId = await storageGet(StorageKey.PinnedTodoId);
 
       const todoList: TodoListDataType[] = list?.map(item => ({
         ...item,
-        pinned: item.id === options.pinnedTodoListId,
+        pinned: item.id === pinnedTodoId,
       }));
 
       if (!todoList.some(item => item.pinned)) {

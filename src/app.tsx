@@ -1,34 +1,44 @@
-import { useEffect } from "react";
+import {
+  createMemoryRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-import { useMsal } from "@azure/msal-react";
+import { MsalProvider } from "@azure/msal-react";
+import { NextUIProvider } from "@nextui-org/react";
 
-import SignInButton from "@/components/signin-button";
-import { useTodoList, useUser } from "@/context";
+import Error from "@/components/error";
 
-import Main from "./main";
+import { msalInstance } from "./auth/ms-oauth";
+import Login from "./pages/login";
+import Main from "./pages/main";
 
 import "./app.css";
 
+const router = createMemoryRouter([
+  {
+    path: "/",
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Main />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
+  },
+]);
+
 function App() {
-  const msalInstance = useMsal();
-  const acount = msalInstance.instance.getActiveAccount();
-
-  const fetchUser = useUser(state => state.fetchUser);
-  const fetchTodoList = useTodoList(state => state.fetchTodoList);
-
-  useEffect(() => {
-    if (acount) {
-      fetchUser();
-
-      fetchTodoList();
-    }
-  }, [acount, fetchUser, fetchTodoList]);
-
-  if (!acount) {
-    return <SignInButton />;
-  }
-
-  return <Main />;
+  return (
+    <MsalProvider instance={msalInstance}>
+      <NextUIProvider locale={navigator.language} className="size-full">
+        <RouterProvider router={router} />
+      </NextUIProvider>
+    </MsalProvider>
+  );
 }
 
 export default App;

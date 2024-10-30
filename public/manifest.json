@@ -20,12 +20,12 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": ["identity", "contextMenus", "storage", "notifications", "sidePanel"],
+  "permissions": ["identity", "contextMenus", "storage", "notifications", "sidePanel", "alarms", "unlimitedStorage"],
   "icons": {
     "16": "extension_icon@16px.png",
     "32": "extension_icon@32px.png",
     "48": "extension_icon@48px.png",
     "128": "extension_icon@128px.png"
   },
-  "host_permissions": ["https://login.microsoftonline.com/*", "https://graph.microsoft.com/v1.0/me/*"]
+  "host_permissions": ["https://*/*", "http://*/*"]
 }

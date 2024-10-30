@@ -20,8 +20,6 @@ export function launchWebAuthFlow(url: string) {
       async (responseUrl) => {
         // Response urls includes a hash (login, acquire token calls)
         if (responseUrl?.includes("#")) {
-          await msalInstance.initialize();
-
           msalInstance
             .handleRedirectPromise(`#${responseUrl.split("#")[1]}`)
             .then(resolve)

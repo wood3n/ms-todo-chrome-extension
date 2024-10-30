@@ -7,7 +7,7 @@ export const getUser = () => http.get<User>("/me");
 
 /** 获取用户头像 */
 export function getUserAvatar() {
-  return http.get<Blob>("/me/photo/$value", {
+  return http.get<Blob>("/me/photos/96x96/$value", {
     responseType: "blob",
   });
 }

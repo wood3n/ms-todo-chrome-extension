@@ -2,9 +2,9 @@ import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 
+import type { CalendarDateTime } from "@internationalized/date";
 import { parseDateTime } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import type { DateValue } from "@nextui-org/react";
 import { Button, DatePicker, Input, Textarea } from "@nextui-org/react";
 
 interface Props {
@@ -17,10 +17,10 @@ interface FormValues {
     content: string | null;
   };
   reminderDateTime: {
-    dateValue: DateValue | null;
+    dateValue: CalendarDateTime | null;
   };
   dueDateTime: {
-    dateValue: DateValue | null;
+    dateValue: CalendarDateTime | null;
   };
 }
 

@@ -28,6 +28,7 @@ export default eslintConfig({
     "no-unused-vars": 0,
     "unused-imports/no-unused-imports": "error",
     "antfu/top-level-function": 0,
+    "react-hooks/exhaustive-deps": 0,
     "unused-imports/no-unused-vars": [
       "warn",
       {

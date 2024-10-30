@@ -1,20 +1,15 @@
-import { ErrorBoundary } from "react-error-boundary";
-
 import { type AuthenticationResult, type EventMessage, EventType } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
-import { NextUIProvider } from "@nextui-org/react";
 import ReactDOM from "react-dom/client";
 
-import { msalInstance } from "@/auth/ms-oauth";
-
 import App from "./app";
+import { msalInstance } from "./auth/ms-oauth";
 
 msalInstance.initialize().then(() => {
-  const accounts = msalInstance.getAllAccounts();
-
-  if (accounts.length > 0) {
-    msalInstance.setActiveAccount(accounts[0]);
+  if (!msalInstance.getActiveAccount() && msalInstance.getAllAccounts().length > 0) {
+    msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0]);
   }
+
+  msalInstance.enableAccountStorageEvents();
 
   msalInstance.addEventCallback((event: EventMessage) => {
     if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
@@ -26,13 +21,5 @@ msalInstance.initialize().then(() => {
 
   const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
-  root.render(
-    <MsalProvider instance={msalInstance}>
-      <NextUIProvider locale={navigator.language} className="size-full">
-        <ErrorBoundary fallback={<div>Something went wrong</div>}>
-          <App />
-        </ErrorBoundary>
-      </NextUIProvider>
-    </MsalProvider>,
-  );
+  root.render(<App />);
 });

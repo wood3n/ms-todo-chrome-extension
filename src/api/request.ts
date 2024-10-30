@@ -34,17 +34,18 @@ const http = axios.create({
   timeout: 10000,
 });
 
-setupCache(http);
+setupCache(http, {
+
+});
 
 http.interceptors.request.use(
   async (config) => {
-    const accessToken = await acquireToken();
+    const res = await acquireToken();
 
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    else {
-      throw new Error(`Can't get accessToken`);
+    console.log("acquireToken>>>", res);
+
+    if (res?.accessToken) {
+      config.headers.Authorization = `Bearer ${res.accessToken}`;
     }
 
     return config;

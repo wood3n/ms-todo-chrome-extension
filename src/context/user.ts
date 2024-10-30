@@ -9,18 +9,18 @@ export interface UserInfo extends User {
 }
 
 export interface UserState {
-  user: UserInfo;
+  user: UserInfo | null;
   fetchUser: () => Promise<void>;
 }
 
 export const useUser = create<UserState>()(set => ({
-  user: {},
+  user: null,
   fetchUser: async () => {
     const user = await getUser();
 
     const avatarBlob = await getUserAvatar();
 
-    const url = URL.createObjectURL(avatarBlob);
+    const url = window.URL.createObjectURL(avatarBlob);
 
     const userInfo = {
       ...user,
