@@ -9,8 +9,6 @@ export const TenantId = "057ab151-e7cd-45a5-8655-4303bf366831";
 
 export const ClientId = "e5da5554-682a-4a9f-ac32-c1a741b6050c";
 
-export const ClientSecret = "BRd8Q~sIntfeaIMSPdo~UiiFeseIS5deQ26s6bAo";
-
 /**
  * https://learn.microsoft.com/zh-cn/graph/permissions-reference
  */
