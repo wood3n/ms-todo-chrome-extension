@@ -1,7 +1,7 @@
 import React from "react";
 
-import { DropDownList } from "@icon-park/react";
-import { Card, CardBody, useDisclosure } from "@nextui-org/react";
+import { More } from "@icon-park/react";
+import { Button, Card, CardBody, useDisclosure } from "@nextui-org/react";
 
 import User from "@/components/user";
 import { useTodoList } from "@/context";
@@ -21,9 +21,17 @@ const Header = ({ className }: Props) => {
     <Card className={className}>
       <CardBody className="flex flex-row items-center justify-between">
         <div className="flex flex-col space-y-1">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-1">
             <div className="truncate text-lg">{todoData.displayName}</div>
-            <a className="cursor-pointer rounded p-1 transition hover:bg-gray-200 hover:text-blue-500" onClick={onOpen}><DropDownList theme="outline" size={16} /></a>
+            <Button
+              isIconOnly
+              size="sm"
+              variant="light"
+              className="h-6 w-6 min-w-min"
+              onClick={onOpen}
+            >
+              <More theme="outline" size={18} />
+            </Button>
           </div>
           <p>{getLocalDate()}</p>
         </div>

@@ -1,69 +1,97 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import { create } from "zustand";
 
-import { createTodoList, deleteTodoList, getTodoList } from "@/api";
-import { storageGet, StorageKey } from "@/utils/storage";
+import { createTodoList, deleteTodoList, getTodoList, updateTodoList } from "@/api";
+import { storageGet, StorageKey, storageSet } from "@/utils/storage";
 
 export interface TodoListDataType extends TodoTaskList {
   pinned?: boolean;
 }
 
 export interface TodoListState {
-  loading: boolean;
   todoList: TodoListDataType[];
   currentTodoData: TodoListDataType;
-  fetchTodoList: () => Promise<void>;
-  addTodo: (displayName: string) => Promise<TodoTaskList>;
+  initTodoList: () => Promise<void>;
+  addTodo: (displayName: string) => Promise<void>;
+  updateTodo: (id: string, displayName: string) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
-  changeCurrentTodo: (id: string) => void;
+  toggleTodo: (id: string) => void;
+  pinTodo: (id: string) => Promise<void>;
 }
 
+const requestTodoList = async (bypassChche = false) => {
+  const response = await getTodoList({
+    // i think people do not need to read so much task
+    $top: 100,
+  }, {
+    cache: {
+      override: bypassChche,
+    },
+  });
+
+  const list = response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
+
+  const pinnedTodoId = await storageGet(StorageKey.PinnedTodoId);
+
+  const todoList: TodoListDataType[] = list?.map(item => ({
+    ...item,
+    pinned: item.id === pinnedTodoId,
+  }));
+
+  if (!todoList.some(item => item.pinned)) {
+    todoList[0].pinned = true;
+  }
+
+  return todoList;
+};
+
 export const useTodoList = create<TodoListState>()((set, get) => ({
-  loading: false,
   todoList: [],
   currentTodoData: {},
-  fetchTodoList: async () => {
-    set({ loading: true });
-    const response = await getTodoList({
-      // i think people do not need to read so much task
-      $top: 100,
-    });
+  initTodoList: async () => {
+    const todoList = await requestTodoList();
 
-    try {
-      const list = response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
-
-      const pinnedTodoId = await storageGet(StorageKey.PinnedTodoId);
-
-      const todoList: TodoListDataType[] = list?.map(item => ({
-        ...item,
-        pinned: item.id === pinnedTodoId,
-      }));
-
-      if (!todoList.some(item => item.pinned)) {
-        todoList[0].pinned = true;
-      }
-
-      set({ todoList, currentTodoData: todoList.find(item => item.pinned) });
-    }
-    finally {
-      set({ loading: false });
-    }
+    set({ todoList, currentTodoData: todoList.find(item => item.pinned) });
   },
   addTodo: async (displayName: string) => {
-    const newTodo = await createTodoList({ displayName });
+    await createTodoList({ displayName });
 
-    await get().fetchTodoList();
+    const todoList = await requestTodoList(true);
 
-    return newTodo;
+    set({ todoList });
+  },
+  updateTodo: async (id: string, displayName: string) => {
+    await updateTodoList(id, { displayName });
+
+    const todoList = await requestTodoList(true);
+
+    set({ todoList });
   },
   deleteTodo: async (id: string) => {
     await deleteTodoList(id);
 
-    get().fetchTodoList();
+    const todoList = await requestTodoList(true);
+
+    set({ todoList });
   },
-  changeCurrentTodo: (id: string) => {
+  toggleTodo: (id: string) => {
     const todoList = get().todoList;
 
     set({ currentTodoData: todoList.find(item => item.id === id) });
+  },
+  pinTodo: async (id: string) => {
+    const todoList = get().todoList;
+
+    set({
+      currentTodoData: todoList.find(item => item.id === id),
+      todoList: todoList.map(item => ({
+        ...item,
+        pinned: id === item.id,
+      })),
+    });
+
+    await storageSet({
+      [StorageKey.PinnedTodoId]: id,
+    });
   },
 }));

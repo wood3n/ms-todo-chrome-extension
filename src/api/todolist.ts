@@ -1,4 +1,5 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
+import type { AxiosRequestConfig } from "axios";
 
 import type { CommonQueryParams } from "./common";
 import http from "./request";
@@ -12,8 +13,9 @@ export interface TodoData {
 }
 
 /** 获取任务列表 */
-export const getTodoList = (params?: CommonQueryParams) => http.get<TodoResponse>("/me/todo/lists", {
+export const getTodoList = (params?: CommonQueryParams, config?: AxiosRequestConfig) => http.get<TodoResponse>("/me/todo/lists", {
   params,
+  ...config,
 });
 
 export function createTodoList(data: TodoData) {

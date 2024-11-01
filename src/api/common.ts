@@ -3,4 +3,6 @@ export interface CommonQueryParams {
   $top?: number;
   /** 高级查询数据: https://learn.microsoft.com/zh-cn/graph/filter-query-parameter?tabs=http */
   $filter?: string;
+  /** 排序：https://learn.microsoft.com/zh-cn/graph/query-parameters?tabs=http#orderby-parameter */
+  $orderby?: string;
 }

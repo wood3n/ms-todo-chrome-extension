@@ -3,12 +3,13 @@ import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 
 import type { CalendarDateTime } from "@internationalized/date";
-import { parseDateTime } from "@internationalized/date";
+import { getLocalTimeZone, parseDateTime, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { Button, DatePicker, Input, Textarea } from "@nextui-org/react";
 
 interface Props {
   data?: TodoTask;
+  onSave: (data: TodoTask) => Promise<void>;
 }
 
 interface FormValues {
@@ -26,7 +27,10 @@ interface FormValues {
 
 const TaskDetail = ({
   data,
+  onSave,
 }: Props) => {
+  const isCompleted = data?.status === "completed";
+
   const { register, control, handleSubmit } = useForm<FormValues>({
     mode: "onChange",
     defaultValues: {
@@ -43,7 +47,26 @@ const TaskDetail = ({
     },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = values => console.log(values);
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
+    const { title, body, reminderDateTime, dueDateTime } = values;
+
+    return onSave({
+      title,
+      body,
+      reminderDateTime: reminderDateTime.dateValue
+        ? {
+            dateTime: reminderDateTime.dateValue.toString(),
+            timeZone: getLocalTimeZone(),
+          }
+        : null,
+      dueDateTime: dueDateTime.dateValue
+        ? {
+            dateTime: dueDateTime.dateValue.toString(),
+            timeZone: getLocalTimeZone(),
+          }
+        : null,
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
@@ -58,6 +81,7 @@ const TaskDetail = ({
             <Input
               label="标题"
               isRequired
+              disabled={isCompleted}
               placeholder="请输入内容标题"
               isInvalid={fieldState.invalid}
               errorMessage={fieldState?.error?.message}
@@ -71,12 +95,14 @@ const TaskDetail = ({
         control={control}
         render={({ field: { onChange, value } }) => (
           <DatePicker
+            isDisabled={isCompleted}
             label="⏰ 提醒时间"
             value={value}
             onChange={onChange}
             showMonthAndYearPickers
             hideTimeZone
             hourCycle={24}
+            minValue={today(getLocalTimeZone())}
             granularity="minute"
           />
         )}
@@ -88,10 +114,12 @@ const TaskDetail = ({
           <DatePicker
             label="⌛ 截止时间"
             value={value}
+            isDisabled={isCompleted}
             onChange={onChange}
             showMonthAndYearPickers
             hideTimeZone
             hourCycle={24}
+            minValue={today(getLocalTimeZone())}
             granularity="minute"
           />
         )}
@@ -100,9 +128,15 @@ const TaskDetail = ({
       <Textarea
         label="备注"
         placeholder="请输入备注"
+        isDisabled={isCompleted}
         {...register("body.content")}
       />
-      <Button type="submit" color="primary">提交</Button>
+      {!isCompleted && (
+        <div className="flex justify-center space-x-2">
+          <Button type="submit" color="primary" className="flex-1">保 存</Button>
+          <Button color="danger" className="flex-1">删除</Button>
+        </div>
+      )}
     </form>
   );
 };

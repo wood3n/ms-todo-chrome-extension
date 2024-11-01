@@ -1,5 +1,8 @@
+import { toast } from "react-toastify";
+
+import type { AxiosError } from "axios";
 import axios from "axios";
-import { setupCache } from "axios-cache-interceptor";
+import { type CacheProperties, setupCache } from "axios-cache-interceptor";
 
 import { acquireToken } from "@/auth/ms-oauth";
 
@@ -11,7 +14,7 @@ declare module "axios" {
     /**
      * 即时更新
      */
-    useTimeStamp?: boolean;
+    cache?: false | Partial<CacheProperties>;
   }
 
   // https://github.com/axios/axios/issues/1510#issuecomment-525382535
@@ -31,18 +34,13 @@ declare module "axios" {
  */
 const http = axios.create({
   baseURL: "https://graph.microsoft.com/v1.0",
-  timeout: 10000,
 });
 
-setupCache(http, {
-
-});
+setupCache(http);
 
 http.interceptors.request.use(
   async (config) => {
     const res = await acquireToken();
-
-    console.log("acquireToken>>>", res);
 
     if (res?.accessToken) {
       config.headers.Authorization = `Bearer ${res.accessToken}`;
@@ -55,6 +53,15 @@ http.interceptors.request.use(
   },
 );
 
-http.interceptors.response.use(response => response.data);
+http.interceptors.response.use((response) => {
+  return response.data;
+}, (error: AxiosError) => {
+  // @ts-ignore
+  if (error.response?.data && error.response.data.error) {
+    // @ts-ignore
+    toast.error(error.response.data.error?.innerError?.code || "Invalid request");
+  }
+  return Promise.reject(error);
+});
 
 export default http;

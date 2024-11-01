@@ -11,10 +11,11 @@ export interface TaskListResponse {
 }
 
 /**
- * 获取任务列表中的任务
+ * get task of todo list
  */
 export function getTaskList(todoListId: string, params?: CommonQueryParams) {
   return request.get<TaskListResponse>(`/me/todo/lists/${todoListId}/tasks`, {
     params,
+    cache: false,
   });
 }

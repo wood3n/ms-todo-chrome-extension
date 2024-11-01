@@ -1,7 +1,11 @@
-import { Modal, ModalContent } from "@nextui-org/react";
+import { useState } from "react";
+
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 import { useTodoList } from "@/context";
 
+import NameInput from "../name-input";
+import SpinContainer from "../spin-container";
 import ListItem from "./list-item";
 
 interface Props {
@@ -12,11 +16,13 @@ interface Props {
 /** 任务列表 */
 const TodoListModal = ({ isOpen, onOpenChange }: Props) => {
   const todoList = useTodoList(store => store.todoList);
-
-  const defaultList = todoList.filter(item => item.wellknownListName === "defaultList");
-  const selfCreatedList = todoList.filter(item => item.wellknownListName !== "defaultList");
-
-  console.log("todoList>>", todoList);
+  const currentTodoData = useTodoList(store => store.currentTodoData);
+  const updateTodo = useTodoList(store => store.updateTodo);
+  const toggleTodo = useTodoList(store => store.toggleTodo);
+  const pinTodo = useTodoList(store => store.pinTodo);
+  const createTodo = useTodoList(store => store.addTodo);
+  const deleteTodo = useTodoList(store => store.deleteTodo);
+  const [loading, setLoading] = useState(false);
 
   return (
     <Modal
@@ -25,26 +31,62 @@ const TodoListModal = ({ isOpen, onOpenChange }: Props) => {
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
     >
-      <ModalContent className="p-2">
+      <ModalContent>
         {(onClose) => {
           return (
             <>
-              {Boolean(defaultList?.length) && (
-                <div>
-                  {defaultList.map(item => (
-                    <ListItem key={item.id} name={item.displayName!} />
+              <ModalHeader className="pb-1">任务分类</ModalHeader>
+              <SpinContainer loading={loading}>
+                <ModalBody className="p-2">
+                  {todoList?.map(item => (
+                    <ListItem
+                      key={item.id}
+                      data={item}
+                      isSelected={item.id === currentTodoData.id}
+                      onToggle={() => {
+                        toggleTodo(item.id!);
+                        onClose();
+                      }}
+                      onPinned={async () => {
+                        await pinTodo(item.id!);
+                        onClose();
+                      }}
+                      onUpdate={async (name) => {
+                        setLoading(true);
+                        try {
+                          await updateTodo(item.id!, name);
+                        }
+                        finally {
+                          setLoading(false);
+                        }
+                      }}
+                      onDelete={async () => {
+                        setLoading(true);
+                        try {
+                          await deleteTodo(item.id!);
+                        }
+                        finally {
+                          setLoading(false);
+                        }
+                      }}
+                    />
                   ))}
-                </div>
-              )}
-              {
-                Boolean(selfCreatedList?.length) && (
-                  <div>
-                    {selfCreatedList.map(item => (
-                      <ListItem key={item.id} name={item.displayName!} />
-                    ))}
-                  </div>
-                )
-              }
+                </ModalBody>
+              </SpinContainer>
+              <ModalFooter className="p-2">
+                <NameInput
+                  placeholder="添加任务分类"
+                  onSubmit={async (name) => {
+                    setLoading(true);
+                    try {
+                      await createTodo(name);
+                    }
+                    finally {
+                      setLoading(false);
+                    }
+                  }}
+                />
+              </ModalFooter>
             </>
           );
         }}

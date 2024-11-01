@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { Button } from "@nextui-org/react";
 

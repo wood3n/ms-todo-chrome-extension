@@ -14,14 +14,12 @@ export default defineConfig({
       media: "[name].[contenthash:8][ext]",
     },
     copy: [{ from: "./src/background.js", to: "" }].concat(process.env.NODE_ENV === "development" ? { from: "./public", to: "" } : []),
+    sourceMap: {
+      js: "inline-source-map",
+    },
   },
   html: {
     template: "./src/index.html",
-  },
-  performance: {
-    chunkSplit: {
-      strategy: "all-in-one",
-    },
   },
   dev: {
     hmr: false,

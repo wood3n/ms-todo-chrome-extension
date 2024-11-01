@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { TaskStatus, TodoTask } from "@microsoft/microsoft-graph-types";
-import { Card, CardBody, CardFooter, CardHeader, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Tab, Tabs, useDisclosure } from "@nextui-org/react";
-import { useRequest } from "ahooks";
+import { getLocalTimeZone } from "@internationalized/date";
+import type { TodoTask } from "@microsoft/microsoft-graph-types";
+import { Card, CardBody, CardFooter, CardHeader, ScrollShadow } from "@nextui-org/react";
 import classNames from "classnames";
 import SimpleBar from "simplebar-react";
 
-import { getTaskList } from "@/api";
-import Spin from "@/components/spin";
+import { createTask, getTaskList, updateTask } from "@/api";
 import { useTodoList } from "@/context";
 
-import TaskDetail from "../task/detail";
-import CreateTask from "./create";
-import TaskCardFooter from "./task-card-footer";
+import Empty from "../empty";
+import NameInput from "../name-input";
+import Spin from "../spin";
+import SpinContainer from "../spin-container";
+import TaskListItem from "./list-item";
+import TaskStatusTabs, { type Status } from "./task-status-tabs";
 
 import "simplebar-react/dist/simplebar.min.css";
 
@@ -22,152 +24,129 @@ interface Props {
 
 const TodoTaskList = ({ className }: Props) => {
   const todoData = useTodoList(state => state.currentTodoData);
-  const [status, setStatus] = useState<TaskStatus>("inProgress");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [currentTask, setCurrentTask] = useState<TodoTask>();
+  const [status, setStatus] = useState<Status>("inProgress");
+  const [initLoading, setInitLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [tasks, setTasks] = useState<TodoTask[]>();
 
-  const tabs = [
-    {
-      label: (
-        <div className="flex items-center space-x-1">
-          <span>⏳</span>
-          <span>进行中</span>
-        </div>
-      ),
-      key: "inProgress",
-    },
-    {
-      label: (
-        <div className="flex items-center space-x-1">
-          <span>✅</span>
-          <span>已完成</span>
-        </div>
-      ),
-      key: "completed",
-    },
-  ];
-
-  const {
-    data: tasks,
-    refreshAsync,
-    loading,
-  } = useRequest(
-    async () => {
-      if (todoData?.id) {
-        let $filter: string;
-        if (status === "completed") {
-          $filter = `status eq 'completed'`;
-        }
-        else {
-          // fucking api don't support in and not
-          $filter = `status eq 'notStarted' or status eq 'inProgress' or status eq 'waitingOnOthers' or status eq 'deferred'`;
-        }
-
-        const res = await getTaskList(todoData.id, {
-          // i think people do not need to read so much task
-          $top: 100,
-          $filter,
-        });
-
-        return res?.value;
+  const getTasks = async () => {
+    if (todoData.id) {
+      let $filter: string;
+      let $orderby;
+      if (status === "completed") {
+        $filter = `status eq 'completed'`;
+        $orderby = `completedDateTime/dateTime desc`;
+      }
+      else {
+        // fucking api doesn't support in and not
+        $filter = `status eq 'notStarted' or status eq 'inProgress' or status eq 'waitingOnOthers' or status eq 'deferred'`;
       }
 
-      return null;
-    },
-    {
-      refreshDeps: [todoData, status],
-    },
-  );
+      const res = await getTaskList(todoData.id, {
+        // i think people do not need to read so much task
+        $top: 100,
+        $filter,
+        $orderby,
+      });
 
-  if (!tasks?.length) {
-    return null;
-  }
+      if (res?.value) {
+        setTasks(res.value);
+      }
+    }
+  };
+
+  useEffect(() => {
+    setInitLoading(true);
+    getTasks().finally(() => {
+      setInitLoading(false);
+    });
+  }, [todoData, status]);
 
   return (
     <Card className={classNames("h-full", className)} shadow="sm">
       <CardHeader className="flex flex-col px-2 pb-0 pt-2">
-        <Tabs
-          size="sm"
-          color="primary"
-          selectedKey={status}
-          onSelectionChange={key => setStatus(key as TaskStatus)}
-        >
-          {tabs.map(item => (
-            <Tab key={item.key} title={item.label} />
-          ))}
-        </Tabs>
+        <TaskStatusTabs
+          status={status}
+          onChange={key => setStatus(key)}
+        />
       </CardHeader>
       <CardBody className="p-0">
-        <Spin loading={loading}>
-          <SimpleBar style={{ height: "100%" }}>
-            {({ scrollableNodeRef, scrollableNodeProps, contentNodeRef, contentNodeProps }) => {
-              return (
-                <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("p-2 h-full", scrollableNodeProps.className)}>
-                  <div ref={contentNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("flex flex-col space-y-2", contentNodeProps.className)}>
-                    {tasks.map(item => (
-                      <Card
-                        isHoverable
-                        isPressable
-                        allowTextSelectionOnPress
-                        key={item.id}
-                        shadow="sm"
-                        className="w-full overflow-x-hidden"
-                        onPress={() => {
-                          setCurrentTask(item);
-                          onOpen();
-                        }}
-                      >
-                        <CardBody className="flex flex-row">
-                          <div className="flex min-w-0 grow flex-col space-y-1">
-                            <div className={classNames("truncate text-base", {
-                              "line-through": status === "completed",
-                            })}
-                            >
-                              {item.title}
-                            </div>
-                            {Boolean(item.body?.content) && (
-                              <div className="truncate text-xs text-gray-500">{item.body!.content}</div>
-                            )}
+        <Spin loading={initLoading}>
+          <SpinContainer loading={updateLoading}>
+            {tasks?.length
+              ? (
+                  <SimpleBar style={{ height: "100%" }}>
+                    {({ scrollableNodeRef, scrollableNodeProps, contentNodeRef, contentNodeProps }) => {
+                      return (
+                        <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("p-2 h-full", scrollableNodeProps.className)}>
+                          <div ref={contentNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("flex flex-col space-y-2", contentNodeProps.className)}>
+                            {tasks?.map(item => (
+                              <TaskListItem
+                                key={item.id}
+                                data={item}
+                                onUpdate={async (newData) => {
+                                  setUpdateLoading(true);
+                                  try {
+                                    await updateTask(todoData.id!, item.id!, newData);
+
+                                    await getTasks();
+                                  }
+                                  finally {
+                                    setUpdateLoading(false);
+                                  }
+                                }}
+                                onComplete={async () => {
+                                  setUpdateLoading(true);
+                                  try {
+                                    await updateTask(todoData.id!, item.id!, {
+                                      status: "completed",
+                                      completedDateTime: {
+                                        dateTime: new Date().toISOString(),
+                                        timeZone: getLocalTimeZone(),
+                                      },
+                                    });
+
+                                    await getTasks();
+                                  }
+                                  finally {
+                                    setUpdateLoading(false);
+                                  }
+                                }}
+                              />
+                            ))}
                           </div>
-                          <Checkbox
-                            radius="full"
-                            isSelected={status === "completed"}
-                            color={status === "completed" ? "success" : "primary"}
-                          />
-                        </CardBody>
-                        {status !== "completed" && (
-                          <TaskCardFooter task={item} />
-                        )}
-                      </Card>
-                    ))}
-                  </div>
-                </ScrollShadow>
-              );
-            }}
-          </SimpleBar>
+                        </ScrollShadow>
+                      );
+                    }}
+                  </SimpleBar>
+                )
+              : (
+                  <Empty description="暂无任务" />
+                )}
+          </SpinContainer>
         </Spin>
       </CardBody>
-      {Boolean(todoData?.id) && (
+      {Boolean(todoData?.id) && status === "inProgress" && (
         <CardFooter className="flex-none">
-          <CreateTask todoId={todoData.id!} afterCreate={refreshAsync} />
+          <NameInput
+            autoFocus
+            placeholder="添加任务"
+            onSubmit={async (title) => {
+              setUpdateLoading(true);
+              try {
+                await createTask(todoData.id!, {
+                  title,
+                });
+
+                await getTasks();
+              }
+              finally {
+                setUpdateLoading(false);
+              }
+            }}
+          />
         </CardFooter>
       )}
-      <Modal
-        isOpen={isOpen}
-        placement="center"
-        onOpenChange={onOpenChange}
-      >
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader>任务信息</ModalHeader>
-              <ModalBody>
-                <TaskDetail data={currentTask} />
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </Card>
   );
 };
