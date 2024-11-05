@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Logout } from "@icon-park/react";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User as UserChip } from "@nextui-org/react";
 
+import { launchWebAuthFlow } from "@/auth/chrome-identity";
+import { getLoginOutUrl } from "@/auth/ms-oauth";
 import { useUser } from "@/context";
-import { StorageKey, storageRm } from "@/utils/storage";
-import { RefreshTokenAlarmName } from "@/utils/token-alarm";
 
 function User() {
   const user = useUser(store => store.user);
@@ -31,9 +31,9 @@ function User() {
           color="danger"
           startContent={<Logout theme="outline" />}
           onClick={async () => {
-            await storageRm([StorageKey.AccessToken, StorageKey.RefreshToken]);
+            const logoutUrl = await getLoginOutUrl();
 
-            await chrome.alarms.clear(RefreshTokenAlarmName);
+            await launchWebAuthFlow(logoutUrl);
 
             navigate("/login");
           }}

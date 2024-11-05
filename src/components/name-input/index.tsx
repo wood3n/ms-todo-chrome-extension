@@ -7,7 +7,7 @@ interface Props {
   initialValue?: string | null;
   placeholder?: string;
   onChange?: (value?: string) => void;
-  onSubmit?: (value: string) => void;
+  onSubmit?: (value: string) => Promise<void>;
 }
 
 const NameInput = ({
@@ -26,9 +26,10 @@ const NameInput = ({
     }
   }, [initialValue]);
 
-  const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handlePressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isInvalid) {
-      return onSubmit?.(innerValue!);
+      await onSubmit?.(innerValue!);
+      setInnerValue("");
     }
   };
 

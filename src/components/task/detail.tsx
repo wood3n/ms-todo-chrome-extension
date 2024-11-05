@@ -81,7 +81,7 @@ const TaskDetail = ({
             <Input
               label="标题"
               isRequired
-              disabled={isCompleted}
+              isReadOnly={isCompleted}
               placeholder="请输入内容标题"
               isInvalid={fieldState.invalid}
               errorMessage={fieldState?.error?.message}
@@ -95,7 +95,7 @@ const TaskDetail = ({
         control={control}
         render={({ field: { onChange, value } }) => (
           <DatePicker
-            isDisabled={isCompleted}
+            isReadOnly={isCompleted}
             label="⏰ 提醒时间"
             value={value}
             onChange={onChange}
@@ -114,7 +114,7 @@ const TaskDetail = ({
           <DatePicker
             label="⌛ 截止时间"
             value={value}
-            isDisabled={isCompleted}
+            isReadOnly={isCompleted}
             onChange={onChange}
             showMonthAndYearPickers
             hideTimeZone
@@ -128,7 +128,7 @@ const TaskDetail = ({
       <Textarea
         label="备注"
         placeholder="请输入备注"
-        isDisabled={isCompleted}
+        readOnly={isCompleted}
         {...register("body.content")}
       />
       {!isCompleted && (

@@ -3,13 +3,22 @@ import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { useIsAuthenticated } from "@azure/msal-react";
+import axios from "axios";
 
+import { ClientId, TenantId } from "@/auth/ms-oauth";
 import Spin from "@/components/spin";
 import { useTodoList, useUser } from "@/context";
 
 import Home from "../home";
 
 import "react-toastify/dist/ReactToastify.min.css";
+
+const getToken = async () => {
+  const res = await axios.post(`https://login.microsoftonline.com/${TenantId}/oauth2/v2.0/token`, {
+    client_id: ClientId,
+
+  });
+};
 
 const Main = () => {
   const isAuthenticated = useIsAuthenticated();

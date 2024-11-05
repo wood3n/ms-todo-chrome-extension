@@ -56,7 +56,7 @@ export async function getLoginOutUrl() {
  */
 export async function acquireToken() {
   return msalInstance.acquireTokenSilent({
-    scopes: ["user.read"],
+    scopes: Scopes,
     account: msalInstance.getAllAccounts()[0],
   })
     .catch(async (error) => {
@@ -70,7 +70,7 @@ export async function acquireToken() {
 async function getAcquireTokenUrl() {
   return new Promise<string>((resolve, reject) => {
     msalInstance.acquireTokenRedirect({
-      scopes: ["user.read"],
+      scopes: Scopes,
       account: msalInstance.getAllAccounts()[0],
       onRedirectNavigate: (url) => {
         resolve(url);
