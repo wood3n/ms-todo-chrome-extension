@@ -53,6 +53,7 @@ export async function getLoginOutUrl() {
 
 /**
  * refresh token
+ * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/token-lifetimes.md#token-renewal
  */
 export async function acquireToken() {
   return msalInstance.acquireTokenSilent({
