@@ -2,16 +2,17 @@ import { useState } from "react";
 import type React from "react";
 
 import { Delete, Edit, HomeTwo, Pin } from "@icon-park/react";
+import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import { Button, Card, CardBody, Tooltip, useDisclosure } from "@nextui-org/react";
 import classNames from "classnames";
 import { motion } from "framer-motion";
 
-import type { TodoListDataType } from "@/context";
+import { useTodoList } from "@/context";
 
 import EditItem from "./edit";
 
 interface Props {
-  data: TodoListDataType;
+  data: TodoTaskList;
   isSelected: boolean;
   onToggle: () => void;
   onUpdate: (name: string) => Promise<void>;
@@ -21,8 +22,10 @@ interface Props {
 
 const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPinned, onDelete }) => {
   const [hovered, setHovered] = useState(false);
+  const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const isPinned = data.id === pinnedTodoData.id;
   const isSelfCreated = data?.wellknownListName === "none";
 
   return (
@@ -36,7 +39,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
         })}
       >
         <div className="flex items-center space-x-2">
-          { data.pinned
+          {isPinned
             ? <HomeTwo theme="outline" size={14} className="text-green-600" strokeWidth={4} />
             : null}
           <div className="flex-auto truncate text-base">{data.displayName}</div>
@@ -53,7 +56,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
                   display: "none",
                 }}
           >
-            {!data.pinned && (
+            {!isPinned && (
               <Tooltip content="固定到首页" color="primary">
                 <Button
                   isIconOnly

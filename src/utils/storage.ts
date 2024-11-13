@@ -11,15 +11,15 @@ export enum StorageKey {
 export async function storageSet(items: {
   [name: string]: any;
 }) {
-  return chrome.storage.local.set(items);
+  return chrome.storage.sync.set(items);
 }
 
 export async function storageGet(key: StorageKey) {
-  const kvs = await chrome.storage.local.get(key);
+  const kvs = await chrome.storage.sync.get(key);
 
   return kvs?.[key];
 }
 
 export async function storageRm(keys: string | string[]) {
-  return chrome.storage.local.remove(keys);
+  return chrome.storage.sync.remove(keys);
 }

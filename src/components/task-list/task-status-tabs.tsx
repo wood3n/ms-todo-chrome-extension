@@ -4,31 +4,27 @@ import { Tab, Tabs } from "@nextui-org/react";
 
 export type Status = "inProgress" | "completed";
 
+interface TabConfig {
+  key: Status;
+  label: React.ReactNode;
+}
+
 interface Props {
-  status: Status;
+  tabs: TabConfig[];
+  selectedKey: Status;
   onChange: (status: Status) => void;
 }
 
 const TaskStatusTabs = ({
-  status,
+  tabs,
+  selectedKey,
   onChange,
 }: Props) => {
-  const tabs = [
-    {
-      label: "⏳ 进行中",
-      key: "inProgress",
-    },
-    {
-      label: "✅ 已完成",
-      key: "completed",
-    },
-  ];
-
   return (
     <Tabs
       size="sm"
       color="primary"
-      selectedKey={status}
+      selectedKey={selectedKey}
       onSelectionChange={key => onChange(key as Status)}
     >
       {tabs.map(item => (

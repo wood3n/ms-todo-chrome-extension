@@ -1,4 +1,5 @@
-import type { TodoTask } from "@microsoft/microsoft-graph-types";
+import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
+import type { AxiosRequestConfig } from "axios";
 
 import request from "./request";
 
@@ -18,4 +19,13 @@ export function updateTask(todoTaskListId: string, taskId: string, data: TodoTas
 
 export function deleteTask(todoTaskListId: string, taskId: string) {
   return request.delete(`/me/todo/lists/${todoTaskListId}/tasks/${taskId}`);
+}
+
+/** get task attachments */
+export function getAttachments(todoTaskListId: string, taskId: string, config?: AxiosRequestConfig) {
+  return request.get<{ value?: TaskFileAttachment[] }>(`/me/todo/lists/${todoTaskListId}/tasks/${taskId}/attachments`, config);
+}
+
+export function deleteAttachment(todoTaskListId: string, taskId: string, id: string) {
+  return request.delete(`/me/todo/lists/${todoTaskListId}/tasks/${taskId}/attachments/${id}`);
 }

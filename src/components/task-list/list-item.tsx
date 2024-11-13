@@ -9,21 +9,20 @@ interface Props {
   data: TodoTask;
   onUpdate: (data: TodoTask) => Promise<void>;
   onComplete: () => Promise<void>;
+  onDelete: () => Promise<void>;
 }
 
-const TaskListItem = ({ data, onUpdate, onComplete }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+const TaskListItem = ({ data, onUpdate, onComplete, onDelete }: Props) => {
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   return (
     <>
       <Card
         isHoverable
-        isPressable
         shadow="sm"
-        className="w-full overflow-x-hidden"
-        onPress={onOpen}
+        className="w-full cursor-pointer overflow-x-hidden"
       >
-        <CardBody className="flex flex-row">
+        <CardBody className="flex flex-row" onClick={onOpen}>
           <div className="flex min-w-0 grow flex-col space-y-1">
             <div className={classNames("truncate text-base", {
               "line-through": data.status === "completed",
@@ -43,7 +42,7 @@ const TaskListItem = ({ data, onUpdate, onComplete }: Props) => {
             />
           )}
         </CardBody>
-        {data.status !== "completed" && (
+        {data.status !== "completed" && (data?.hasAttachments || data?.reminderDateTime) && (
           <TaskCardFooter task={data} />
         )}
       </Card>
@@ -59,7 +58,12 @@ const TaskListItem = ({ data, onUpdate, onComplete }: Props) => {
               data={data}
               onSave={async (data) => {
                 await onUpdate(data);
-                onOpenChange();
+                onClose();
+              }}
+              onDelete={() => {
+                onClose();
+
+                onDelete();
               }}
             />
           </ModalBody>

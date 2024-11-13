@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 import { useIsAuthenticated } from "@azure/msal-react";
-import { Card, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody } from "@nextui-org/react";
 
 import TodoIcon from "@/assets/microsoft-todo.svg?react";
 import SignInButton from "@/components/signin-button";
@@ -21,6 +21,14 @@ const Login = () => {
         </CardBody>
       </Card>
       <SignInButton />
+      <Button
+        color="primary"
+        variant="faded"
+        onClick={() => window.open("https://to-do.office.com/tasks/", "_blank", "popup")}
+        className="border-1 border-gray-200 bg-white"
+      >
+        Register an account
+      </Button>
     </div>
   );
 };
