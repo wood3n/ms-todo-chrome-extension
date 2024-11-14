@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
-import type { TodoListDataType } from "@/context";
-
-import NameInput from "../name-input";
+import NameInput from "@/components/name-input";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  data: TodoListDataType;
+  data: TodoTaskList;
   onSubmit: (name: string) => Promise<void>;
 }
 

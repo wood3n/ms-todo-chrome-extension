@@ -1,39 +1,39 @@
 import React, { useState } from "react";
 
 import { DeleteFour, Download } from "@icon-park/react";
-import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
+import type { TaskFileAttachment } from "@microsoft/microsoft-graph-types";
 import { Card, CardBody } from "@nextui-org/react";
 import classNames from "classnames";
 import { filesize } from "filesize";
 
-import AsyncButton from "../async-button";
+import AsyncButton from "@/components/async-button";
 
 interface Props {
-  task: TodoTask;
   data: TaskFileAttachment;
   onDownload: VoidFunction;
   onDelete: VoidFunction;
+  className?: string;
 }
 
-const Attachment = ({ data, onDownload, onDelete }: Props) => {
+const AttachmentFile = ({ data, onDownload, onDelete, className }: Props) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <Card
       radius="sm"
-      shadow="sm"
+      shadow="none"
       isHoverable
-      className="cursor-pointer"
+      className={classNames("cursor-pointer border border-solid border-gray-300", className)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <CardBody
-        className="flex-row items-center justify-between space-x-4"
+        className="flex-row items-center justify-between space-x-4 p-2"
         onClick={onDownload}
       >
-        <div className="flex min-w-0 flex-1 items-center justify-between space-x-2">
-          <span className="flex min-w-0 flex-1 items-center space-x-1">
-            <span className="flex-1 truncate text-base">{data.name}</span>
+        <div className="flex min-w-0 grow items-center space-x-2">
+          <span className="flex min-w-0 grow items-center space-x-1">
+            <span className="truncate text-xs">{data.name}</span>
             {hovered && (
               <span className={classNames("transition-all", {
                 "opacity-0": !hovered,
@@ -44,7 +44,7 @@ const Attachment = ({ data, onDownload, onDelete }: Props) => {
               </span>
             )}
           </span>
-          <span>
+          <span className="flex-none">
             {data.size && filesize(data.size)}
           </span>
         </div>
@@ -64,4 +64,4 @@ const Attachment = ({ data, onDownload, onDelete }: Props) => {
   );
 };
 
-export default Attachment;
+export default AttachmentFile;

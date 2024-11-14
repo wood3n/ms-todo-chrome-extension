@@ -4,7 +4,8 @@ import { useIsAuthenticated } from "@azure/msal-react";
 import { Button, Card, CardBody } from "@nextui-org/react";
 
 import TodoIcon from "@/assets/microsoft-todo.svg?react";
-import SignInButton from "@/components/signin-button";
+
+import SignInButton from "./signin-button";
 
 const Login = () => {
   const isAuthenticated = useIsAuthenticated();

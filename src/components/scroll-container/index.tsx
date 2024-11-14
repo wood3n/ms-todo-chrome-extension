@@ -6,14 +6,15 @@ import SimpleBar from "simplebar-react";
 
 interface Props {
   children: React.ReactNode;
+  className?: string;
 }
 
-const ScrollContainer = ({ children }: Props) => {
+const ScrollContainer = ({ children, className }: Props) => {
   return (
-    <SimpleBar style={{ height: "100%" }}>
+    <SimpleBar className={className}>
       {({ scrollableNodeRef, scrollableNodeProps, contentNodeRef, contentNodeProps }) => {
         return (
-          <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("p-2 h-full", scrollableNodeProps.className)}>
+          <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("h-full", scrollableNodeProps.className)}>
             <div ref={contentNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("flex flex-col space-y-2", contentNodeProps.className)}>
               {children}
             </div>

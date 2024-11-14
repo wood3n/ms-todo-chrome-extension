@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
+import NameInput from "@/components/name-input";
+import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
 
-import NameInput from "../name-input";
-import SpinContainer from "../spin-container";
 import ListItem from "./list-item";
 
 interface Props {

@@ -5,9 +5,8 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 
 import { launchWebAuthFlow } from "@/auth/chrome-identity";
 import { getLoginOutUrl } from "@/auth/ms-oauth";
+import AsyncButton from "@/components/async-button";
 import { useUser } from "@/context";
-
-import AsyncButton from "../async-button";
 
 function User() {
   const user = useUser(store => store.user);

@@ -3,11 +3,11 @@ import React from "react";
 import { More } from "@icon-park/react";
 import { Button, Card, CardBody, useDisclosure } from "@nextui-org/react";
 
-import User from "@/components/user";
 import { useTodoList } from "@/context";
 import { getLocalDate } from "@/utils/date";
 
 import TodoListModal from "../todo-list-modal";
+import User from "./user";
 
 interface Props {
   className?: string;

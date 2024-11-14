@@ -1,9 +1,9 @@
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Card, CardBody, Checkbox, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Card, CardBody, Checkbox, useDisclosure } from "@nextui-org/react";
 import classNames from "classnames";
 
-import TaskDetail from "../task/detail";
-import TaskCardFooter from "./task-card-footer";
+import TaskDetail from "../task";
+import TaskExtraInfo from "./task-extra-info";
 
 interface Props {
   data: TodoTask;
@@ -43,32 +43,23 @@ const TaskListItem = ({ data, onUpdate, onComplete, onDelete }: Props) => {
           )}
         </CardBody>
         {data.status !== "completed" && (data?.hasAttachments || data?.reminderDateTime) && (
-          <TaskCardFooter task={data} />
+          <TaskExtraInfo task={data} />
         )}
       </Card>
-      <Modal
+      <TaskDetail
+        data={data}
         isOpen={isOpen}
-        placement="center"
         onOpenChange={onOpenChange}
-      >
-        <ModalContent>
-          <ModalHeader>任务信息</ModalHeader>
-          <ModalBody>
-            <TaskDetail
-              data={data}
-              onSave={async (data) => {
-                await onUpdate(data);
-                onClose();
-              }}
-              onDelete={() => {
-                onClose();
+        onSave={async (data) => {
+          await onUpdate(data);
+          onClose();
+        }}
+        onDelete={() => {
+          onClose();
 
-                onDelete();
-              }}
-            />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+          onDelete();
+        }}
+      />
     </>
   );
 };

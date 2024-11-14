@@ -2,20 +2,10 @@ import { toast } from "react-toastify";
 
 import type { AxiosError } from "axios";
 import axios from "axios";
-import { type CacheProperties, setupCache } from "axios-cache-interceptor";
 
 import { acquireToken } from "@/auth/ms-oauth";
 
 declare module "axios" {
-  /**
-   * 自定义配置参数
-   */
-  export interface AxiosRequestConfig {
-    /**
-     * 即时更新
-     */
-    cache?: false | Partial<CacheProperties>;
-  }
 
   // https://github.com/axios/axios/issues/1510#issuecomment-525382535
   export interface AxiosInstance {
@@ -35,8 +25,6 @@ declare module "axios" {
 const http = axios.create({
   baseURL: "https://graph.microsoft.com/v1.0",
 });
-
-setupCache(http);
 
 http.interceptors.request.use(
   async (config) => {

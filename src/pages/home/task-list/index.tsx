@@ -7,13 +7,13 @@ import classNames from "classnames";
 import SimpleBar from "simplebar-react";
 
 import { createTask, deleteTask, getTaskList, updateTask } from "@/api";
+import Empty from "@/components/empty";
+import NameInput from "@/components/name-input";
+import Spin from "@/components/spin";
+import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
 import { updateBadge } from "@/utils/badge";
 
-import Empty from "../empty";
-import NameInput from "../name-input";
-import Spin from "../spin";
-import SpinContainer from "../spin-container";
 import TaskListItem from "./list-item";
 import TaskStatusTabs, { type Status } from "./task-status-tabs";
 
@@ -23,7 +23,7 @@ interface Props {
   className?: string;
 }
 
-const TodoTaskList = ({ className }: Props) => {
+const TaskList = ({ className }: Props) => {
   const currentTodoData = useTodoList(state => state.currentTodoData);
   const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const [status, setStatus] = useState<Status>("inProgress");
@@ -179,4 +179,4 @@ const TodoTaskList = ({ className }: Props) => {
   );
 };
 
-export default TodoTaskList;
+export default TaskList;

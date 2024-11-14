@@ -16,6 +16,5 @@ export interface TaskListResponse {
 export function getTaskList(todoListId: string, params?: CommonQueryParams) {
   return request.get<TaskListResponse>(`/me/todo/lists/${todoListId}/tasks`, {
     params,
-    cache: false,
   });
 }

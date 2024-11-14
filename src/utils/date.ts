@@ -1,4 +1,5 @@
-import { CalendarDate, Time } from "@internationalized/date";
+import type { ZonedDateTime } from "@internationalized/date";
+import { parseAbsoluteToLocal } from "@internationalized/date";
 
 export function getLocalDate() {
   const now = new Date();
@@ -13,19 +14,27 @@ export function getLocalDate() {
   return formatter.format(now);
 }
 
-export function convertUTCToLocalTime(utcDateString: string) {
-  return new Date(utcDateString).toLocaleString();
+/** parse iso time to local time string: YYYY-MM-DD HH:mm */
+export function formatISOTime(datetime: string) {
+  return parseAbsoluteToLocal(`${datetime}Z`).toDate().toLocaleString(undefined, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
-/** 获取日期 get date */
-export function getDateFromISO(datetime: string) {
-  const date = new Date(datetime);
-
-  return new CalendarDate(date.getFullYear(), date.getMonth(), date.getDate());
+/** parse iso datetime to local datetime */
+export function parseLocalDate(datetime: string) {
+  return parseAbsoluteToLocal(`${datetime}Z`);
 }
 
-export function getTimeFromISO(datetime: string) {
-  const date = new Date(datetime);
+/** get datetime millisecond */
+export function parseTimestamp(zonedate: ZonedDateTime) {
+  return zonedate.toDate().getTime();
+}
 
-  return new Time(date.getHours(), date.getSeconds());
+export function parseUTCTimeStr(zonedate: ZonedDateTime) {
+  return zonedate.toDate().toISOString();
 }
