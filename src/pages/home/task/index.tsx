@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 
-import { CloseRemind, Upload } from "@icon-park/react";
+import { CloseRemind } from "@icon-park/react";
 import type { ZonedDateTime } from "@internationalized/date";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
+import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
 
+import { useTodoList } from "@/context";
 import { parseLocalDate, parseTimestamp, parseUTCTimeStr } from "@/utils/date";
 
 import SpinContainer from "../../../components/spin-container";
-import TaskAttachment from "../task-attachment";
+import TaskAttachment from "./task-attachment";
 
 interface Props {
   data: TodoTask;
@@ -38,6 +39,7 @@ const Task = ({
   onSave,
   onDelete,
 }: Props) => {
+  const currentTodoData = useTodoList(store => store.currentTodoData);
   const [loading, setLoading] = useState(false);
 
   const isReadOnly = data?.status === "completed";
@@ -84,11 +86,11 @@ const Task = ({
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
     >
-      <ModalContent>
-        <ModalHeader>任务信息</ModalHeader>
-        <ModalBody>
-          <SpinContainer loading={loading}>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalContent>
+          <ModalHeader>任务信息</ModalHeader>
+          <ModalBody>
+            <SpinContainer loading={loading} className="flex flex-col space-y-4">
               <Controller
                 name="title"
                 control={control}
@@ -163,33 +165,24 @@ const Task = ({
                   );
                 }}
               />
-              <div className="flex items-center space-x-2">
-                <span className="text-sm">附件</span>
-                <Button isIconOnly size="sm" variant="flat" color="primary" radius="full" className="h-5 min-h-5"><Upload /></Button>
-              </div>
-              {data?.hasAttachments && (
-                <TaskAttachment
-                  readyRequest={isOpen}
-                  task={data}
-                  className="max-h-40 pb-5"
-                />
-              )}
-              {!isReadOnly && (
-                <div className="flex justify-center space-x-2">
-                  <Button type="submit" color="primary" className="flex-1">保 存</Button>
-                  <Button
-                    color="danger"
-                    className="flex-1"
-                    onClick={onDelete}
-                  >
-                    删除
-                  </Button>
-                </div>
-              )}
-            </form>
-          </SpinContainer>
-        </ModalBody>
-      </ModalContent>
+              <TaskAttachment task={data} />
+            </SpinContainer>
+          </ModalBody>
+          {!isReadOnly
+          && (
+            <ModalFooter>
+              <Button type="submit" color="primary" className="flex-1">保 存</Button>
+              <Button
+                color="danger"
+                className="flex-1"
+                onClick={onDelete}
+              >
+                删除
+              </Button>
+            </ModalFooter>
+          )}
+        </ModalContent>
+      </form>
     </Modal>
   );
 };

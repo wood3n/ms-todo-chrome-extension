@@ -1,54 +1,62 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { DeleteFour, Download } from "@icon-park/react";
-import { Button, Card, CardBody } from "@nextui-org/react";
-import clx from "classnames";
+import { DeleteFour } from "@icon-park/react";
+import { Card, CardBody, Spinner } from "@nextui-org/react";
+import classNames from "classnames";
+import { filesize } from "filesize";
+
+import AsyncButton from "@/components/async-button";
 
 interface Props {
-  name: string;
+  onDownload: VoidFunction;
+  onDelete: VoidFunction;
+  name?: string;
+  size?: number;
+  isUploading?: boolean;
+  uploadProgress?: number;
+  errorMessage?: React.ReactNode;
+  className?: string;
 }
 
-const FileInfo = ({ name }: Props) => {
-  const [hovered, setHovered] = useState(false);
-
+const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage, className }: Props) => {
   return (
     <Card
-      isHoverable
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative inline-block h-16 w-16 border border-solid border-gray-300"
       shadow="none"
+      radius="sm"
+      isHoverable
+      className={classNames("cursor-pointer border border-solid border-gray-300", {
+        "border-red-300": Boolean(errorMessage),
+      }, className)}
     >
-      <CardBody className="h-full p-0">
-        <div className="truncate p-4 text-sm">{name}</div>
-        <div className={clx("absolute h-full w-full flex items-center p-2 space-x-1 bg-white opacity-50", {
-          hidden: !hovered,
-        })}
-        >
-          <Button
-            isIconOnly
-            radius="full"
-            size="sm"
-            variant="light"
-            color="primary"
-            className="h-6 min-h-6 w-6 min-w-6 flex-1"
-          >
-            <Download />
-          </Button>
-          <Button
-            isIconOnly
-            radius="full"
-            size="sm"
-            variant="light"
-            color="danger"
-            className="h-6 min-h-6 w-6 min-w-6 flex-1"
-          >
-            <DeleteFour />
-          </Button>
+      <CardBody
+        className="flex-row items-center justify-between space-x-4 p-2"
+        onClick={onDownload}
+      >
+        <div className="flex min-w-0 grow items-center space-x-2">
+          <span className="flex min-w-0 grow items-center space-x-1">
+            {isUploading && (
+              <Spinner size="sm" />
+            )}
+            <span>{name || "unknown"}</span>
+          </span>
+          <span className="flex-none">
+            {size && filesize(size)}
+          </span>
         </div>
+        <AsyncButton
+          size="sm"
+          isIconOnly
+          variant="flat"
+          color="danger"
+          radius="full"
+          className="h-6 min-h-6 w-6 min-w-6"
+          onClick={onDelete}
+        >
+          <DeleteFour />
+        </AsyncButton>
       </CardBody>
     </Card>
   );
 };
 
-export default FileInfo;
+export default FileItem;

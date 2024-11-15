@@ -28,13 +28,11 @@ const TaskExtraInfo = ({ task }: Props) => {
             </Chip>
           )}
         </span>
-        {
-          task.hasAttachments && (
-            <Button size="sm" variant="light" isIconOnly radius="full" onClick={onOpen}>
-              <LinkIcon size={16} className="text-gray-500" />
-            </Button>
-          )
-        }
+        {task.hasAttachments && (
+          <Button size="sm" variant="light" isIconOnly radius="full" onClick={onOpen}>
+            <LinkIcon size={16} className="text-gray-500" />
+          </Button>
+        )}
       </CardFooter>
       <Modal placement="center" isDismissable={false} scrollBehavior="inside" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
@@ -44,8 +42,7 @@ const TaskExtraInfo = ({ task }: Props) => {
           <ModalBody>
             <TaskAttachment
               task={task}
-              readyRequest={isOpen}
-              className="pb-6"
+              shouldRequest={isOpen}
             />
           </ModalBody>
         </ModalContent>

@@ -6,7 +6,13 @@ import axios from "axios";
 import { acquireToken } from "@/auth/ms-oauth";
 
 declare module "axios" {
-
+  /**
+   * 自定义配置参数
+   */
+  export interface AxiosRequestConfig {
+    /** keep native response */
+    keepNative?: boolean;
+  }
   // https://github.com/axios/axios/issues/1510#issuecomment-525382535
   export interface AxiosInstance {
     request<T = unknown>(config: AxiosRequestConfig): Promise<T>;
@@ -42,6 +48,10 @@ http.interceptors.request.use(
 );
 
 http.interceptors.response.use((response) => {
+  if (response.config.keepNative) {
+    return response;
+  }
+
   return response.data;
 }, (error: AxiosError) => {
   // @ts-ignore

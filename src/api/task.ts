@@ -1,5 +1,5 @@
-import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
-import type { AxiosRequestConfig } from "axios";
+import type { AttachmentInfo, TaskFileAttachment, TodoTask, UploadSession } from "@microsoft/microsoft-graph-types";
+import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import request from "./request";
 
@@ -28,4 +28,33 @@ export function getAttachments(todoTaskListId: string, taskId: string, config?: 
 
 export function deleteAttachment(todoTaskListId: string, taskId: string, id: string) {
   return request.delete(`/me/todo/lists/${todoTaskListId}/tasks/${taskId}/attachments/${id}`);
+}
+
+export async function uploadAttachment({ todoTaskListId, taskId, data, file }: {
+  todoTaskListId: string;
+  taskId: string;
+  data: AttachmentInfo;
+  file: File;
+}) {
+  const session = await request.post<UploadSession>(`/me/todo/lists/${todoTaskListId}/tasks/${taskId}/attachments/createUploadSession`, {
+    attachmentInfo: data,
+  });
+
+  if (session?.uploadUrl) {
+    const fileContent = await file.arrayBuffer();
+
+    const res: AxiosResponse = await request.put(`${session.uploadUrl}/content`, fileContent, {
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "Content-Range": `bytes ${0}-${file.size - 1}/${file.size}`,
+      },
+      keepNative: true,
+    });
+
+    if (res.status === 201) {
+      return Promise.resolve();
+    }
+  }
+
+  return Promise.reject(new Error("无法获取上传链接"));
 }
