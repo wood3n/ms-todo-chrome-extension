@@ -16,7 +16,9 @@ interface Props {
 }
 
 interface AttachmentState extends TaskFileAttachment {
+  tempId?: string;
   isUploading?: boolean;
+  uploadError?: string;
   file?: File;
 }
 
@@ -58,24 +60,17 @@ const TaskAttachment = ({ task }: Props) => {
         file: attachment.file as File,
       });
 
-      setAttachments(attachments.map((item) => {
-        if (item.id === attachment.id) {
-          return {
-            ...item,
-            isUploading: false,
-          };
-        }
+      const res = await requestAttachment(currentTodoData.id!, task.id!);
 
-        return item;
-      }));
+      setAttachments(res?.value ?? []);
     }
     catch {
       setAttachments(attachments.map((item) => {
-        if (item.id === attachment.id) {
+        if (item.tempId === attachment.tempId) {
           return {
             ...item,
             isUploading: false,
-            errorMessage: "上传出错，请重试",
+            uploadError: "上传出错，请重试",
           };
         }
 
@@ -107,7 +102,7 @@ const TaskAttachment = ({ task }: Props) => {
               const file = e.target.files?.[0];
 
               const newAttachment: AttachmentState = {
-                id: `${Date.now()}#${count.current}`,
+                tempId: `${Date.now()}#${count.current}`,
                 name: file?.name,
                 size: file?.size,
                 isUploading: true,
@@ -134,11 +129,20 @@ const TaskAttachment = ({ task }: Props) => {
                 name={attachment.name!}
                 size={attachment.size}
                 isUploading={attachment.isUploading}
-                onDownload={() => download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${task.id}/$value`, attachment.name)}
+                onDownload={() => {
+                  if (attachment.id) {
+                    download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
+                  }
+                }}
                 onDelete={async () => {
-                  await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
+                  if (attachment.tempId) {
+                    setAttachments(old => old.filter(_item => _item.tempId === attachment.tempId));
+                  }
+                  else {
+                    await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
 
-                  await getAttachments();
+                    await getAttachments();
+                  }
                 }}
                 className="shrink-0 grow basis-auto"
               />

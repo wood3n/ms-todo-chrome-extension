@@ -37,7 +37,7 @@ const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage,
             {isUploading && (
               <Spinner size="sm" />
             )}
-            <span>{name || "unknown"}</span>
+            <span className="truncate">{name || "unknown"}</span>
           </span>
           <span className="flex-none">
             {size && filesize(size)}
