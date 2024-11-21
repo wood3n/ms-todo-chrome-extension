@@ -129,9 +129,9 @@ const TaskAttachment = ({ task }: Props) => {
                 name={attachment.name!}
                 size={attachment.size}
                 isUploading={attachment.isUploading}
-                onDownload={() => {
+                onDownload={async () => {
                   if (attachment.id) {
-                    download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
+                    await download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
                   }
                 }}
                 onDelete={async () => {

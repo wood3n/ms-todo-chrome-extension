@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { DeleteFour } from "@icon-park/react";
 import { Card, CardBody, Spinner } from "@nextui-org/react";
@@ -7,8 +7,10 @@ import { filesize } from "filesize";
 
 import AsyncButton from "@/components/async-button";
 
+import SpinContainer from "../spin-container";
+
 interface Props {
-  onDownload: VoidFunction;
+  onDownload: () => Promise<void>;
   onDelete: VoidFunction;
   name?: string;
   size?: number;
@@ -19,43 +21,55 @@ interface Props {
 }
 
 const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage, className }: Props) => {
+  const [downloading, setDownloading] = useState(false);
+
   return (
-    <Card
-      shadow="none"
-      radius="sm"
-      isHoverable
-      className={classNames("cursor-pointer border border-solid border-gray-300", {
-        "border-red-300": Boolean(errorMessage),
-      }, className)}
-    >
-      <CardBody
-        className="flex-row items-center justify-between space-x-4 p-2"
-        onClick={onDownload}
+    <SpinContainer loading={downloading}>
+      <Card
+        shadow="none"
+        radius="sm"
+        isHoverable
+        className={classNames("cursor-pointer border border-solid border-gray-300", {
+          "border-red-300": Boolean(errorMessage),
+        }, className)}
       >
-        <div className="flex min-w-0 grow items-center space-x-2">
-          <span className="flex min-w-0 grow items-center space-x-1">
-            {isUploading && (
-              <Spinner size="sm" />
-            )}
-            <span className="truncate">{name || "unknown"}</span>
-          </span>
-          <span className="flex-none">
-            {size && filesize(size)}
-          </span>
-        </div>
-        <AsyncButton
-          size="sm"
-          isIconOnly
-          variant="flat"
-          color="danger"
-          radius="full"
-          className="h-6 min-h-6 w-6 min-w-6"
-          onClick={onDelete}
+        <CardBody
+          className="flex-row items-center justify-between space-x-4 p-2"
+          onClick={async () => {
+            setDownloading(true);
+            try {
+              await onDownload();
+            }
+            finally {
+              setDownloading(false);
+            }
+          }}
         >
-          <DeleteFour />
-        </AsyncButton>
-      </CardBody>
-    </Card>
+          <div className="flex min-w-0 grow items-center space-x-2">
+            <span className="flex min-w-0 grow items-center space-x-1">
+              {isUploading && (
+                <Spinner size="sm" />
+              )}
+              <span className="truncate">{name || "unknown"}</span>
+            </span>
+            <span className="flex-none">
+              {size && filesize(size)}
+            </span>
+          </div>
+          <AsyncButton
+            size="sm"
+            isIconOnly
+            variant="flat"
+            color="danger"
+            radius="full"
+            className="h-6 min-h-6 w-6 min-w-6"
+            onClick={onDelete}
+          >
+            <DeleteFour />
+          </AsyncButton>
+        </CardBody>
+      </Card>
+    </SpinContainer>
   );
 };
 

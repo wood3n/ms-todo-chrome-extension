@@ -5,10 +5,11 @@ interface Props {
   loading: boolean;
   children: React.ReactNode;
   label?: string;
+  size?: "sm" | "md" | "lg";
   className?: string;
 }
 
-const SpinContainer = ({ loading, children, label, className }: Props) => {
+const SpinContainer = ({ loading, children, label, size, className }: Props) => {
   return (
     <div className={classNames("relative h-full w-full", className)}>
       {children}
@@ -17,7 +18,7 @@ const SpinContainer = ({ loading, children, label, className }: Props) => {
           hidden: !loading,
         })}
       >
-        <Spinner label={label} />
+        <Spinner label={label} size={size} />
       </div>
     </div>
   );
