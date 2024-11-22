@@ -24,7 +24,7 @@ const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage,
   const [downloading, setDownloading] = useState(false);
 
   return (
-    <SpinContainer loading={downloading}>
+    <SpinContainer loading={downloading} size="sm">
       <Card
         shadow="none"
         radius="sm"

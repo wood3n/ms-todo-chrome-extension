@@ -8,7 +8,6 @@ import { getLocalTimeZone, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
 
-import { useTodoList } from "@/context";
 import { parseLocalDate, parseTimestamp, parseUTCTimeStr } from "@/utils/date";
 
 import SpinContainer from "../../../components/spin-container";
@@ -39,7 +38,6 @@ const Task = ({
   onSave,
   onDelete,
 }: Props) => {
-  const currentTodoData = useTodoList(store => store.currentTodoData);
   const [loading, setLoading] = useState(false);
 
   const isReadOnly = data?.status === "completed";
@@ -90,7 +88,7 @@ const Task = ({
         <ModalContent>
           <ModalHeader>任务信息</ModalHeader>
           <ModalBody>
-            <SpinContainer loading={loading} className="flex flex-col space-y-4">
+            <SpinContainer loading={loading} className="flex flex-col space-y-4 overflow-y-hidden">
               <Controller
                 name="title"
                 control={control}

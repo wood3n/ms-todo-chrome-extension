@@ -3,13 +3,16 @@ import React from "react";
 import EmptyIcon from "@/assets/empty.svg?react";
 
 interface Props {
+  size?: "sm" | "default";
   description?: React.ReactNode;
 }
 
-const Empty = ({ description }: Props) => {
+const Empty = ({ size = "default", description }: Props) => {
+  const iconSize = size === "sm" ? 24 : 48;
+
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center space-y-2 text-gray-500">
-      <EmptyIcon width={48} height={48} />
+    <div className="flex h-full w-full flex-col items-center justify-center space-y-2 py-4 text-gray-500">
+      <EmptyIcon width={iconSize} height={iconSize} />
       <div>{description}</div>
     </div>
   );

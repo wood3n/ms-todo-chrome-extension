@@ -5,6 +5,7 @@ import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-ty
 import { Button } from "@nextui-org/react";
 
 import { deleteAttachment, getAttachments as requestAttachment, uploadAttachment } from "@/api";
+import Empty from "@/components/empty";
 import FileItem from "@/components/file";
 import ScrollContainer from "@/components/scroll-container";
 import SpinContainer from "@/components/spin-container";
@@ -122,32 +123,34 @@ const TaskAttachment = ({ task }: Props) => {
       </div>
       <SpinContainer loading={loading}>
         <ScrollContainer className="max-h-40">
-          {attachments?.map((attachment) => {
-            return (
-              <FileItem
-                key={attachment.id}
-                name={attachment.name!}
-                size={attachment.size}
-                isUploading={attachment.isUploading}
-                onDownload={async () => {
-                  if (attachment.id) {
-                    await download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
-                  }
-                }}
-                onDelete={async () => {
-                  if (attachment.tempId) {
-                    setAttachments(old => old.filter(_item => _item.tempId === attachment.tempId));
-                  }
-                  else {
-                    await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
+          {attachments?.length
+            ? attachments.map((attachment) => {
+              return (
+                <FileItem
+                  key={attachment.id}
+                  name={attachment.name!}
+                  size={attachment.size}
+                  isUploading={attachment.isUploading}
+                  onDownload={async () => {
+                    if (attachment.id) {
+                      await download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
+                    }
+                  }}
+                  onDelete={async () => {
+                    if (attachment.tempId) {
+                      setAttachments(old => old.filter(_item => _item.tempId === attachment.tempId));
+                    }
+                    else {
+                      await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
 
-                    await getAttachments();
-                  }
-                }}
-                className="shrink-0 grow basis-auto"
-              />
-            );
-          })}
+                      await getAttachments();
+                    }
+                  }}
+                  className="shrink-0 grow basis-auto"
+                />
+              );
+            })
+            : <Empty description="暂无附件" size="sm" />}
         </ScrollContainer>
       </SpinContainer>
     </>

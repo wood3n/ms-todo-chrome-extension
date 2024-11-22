@@ -29,8 +29,15 @@ const TaskExtraInfo = ({ task }: Props) => {
           )}
         </span>
         {task.hasAttachments && (
-          <Button size="sm" variant="light" isIconOnly radius="full" onClick={onOpen}>
-            <LinkIcon size={16} className="text-gray-500" />
+          <Button
+            size="sm"
+            variant="light"
+            radius="full"
+            onClick={onOpen}
+            className="h-6 min-h-6"
+            startContent={<LinkIcon size={14} className="text-gray-500" />}
+          >
+            附件
           </Button>
         )}
       </CardFooter>

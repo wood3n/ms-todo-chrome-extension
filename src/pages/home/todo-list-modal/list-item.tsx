@@ -57,7 +57,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
                 }}
           >
             {!isPinned && (
-              <Tooltip content="固定到首页" color="primary">
+              <Tooltip content="固定到首页" color="primary" closeDelay={0}>
                 <Button
                   isIconOnly
                   size="sm"
@@ -71,7 +71,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
             )}
             {isSelfCreated && (
               <>
-                <Tooltip content="修改">
+                <Tooltip content="修改" closeDelay={0}>
                   <Button
                     isIconOnly
                     size="sm"
@@ -81,7 +81,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
                     <Edit theme="outline" />
                   </Button>
                 </Tooltip>
-                <Tooltip content="删除" color="danger">
+                <Tooltip content="删除" color="danger" closeDelay={0}>
                   <Button
                     isIconOnly
                     size="sm"
