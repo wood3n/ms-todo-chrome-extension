@@ -11,7 +11,7 @@ import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalF
 import { parseLocalDate, parseTimestamp, parseUTCTimeStr } from "@/utils/date";
 
 import SpinContainer from "../../../components/spin-container";
-import TaskAttachment from "./task-attachment";
+import TaskAttachment from "../task-attachment";
 
 interface Props {
   data: TodoTask;
@@ -129,7 +129,7 @@ const Task = ({
                       isReadOnly={isReadOnly}
                       label={(
                         <div>
-                          ⏰ 提醒时间
+                          提醒时间
                           {isOutDate && <Chip color="warning" variant="light">已过期</Chip>}
                         </div>
                       )}
@@ -163,7 +163,7 @@ const Task = ({
                   );
                 }}
               />
-              <TaskAttachment task={data} />
+              <TaskAttachment title={<span className="text-sm">附件</span>} task={data} listClassName="max-h-40" />
             </SpinContainer>
           </ModalBody>
           {!isReadOnly
@@ -175,7 +175,7 @@ const Task = ({
                 className="flex-1"
                 onClick={onDelete}
               >
-                删除
+                删 除
               </Button>
             </ModalFooter>
           )}

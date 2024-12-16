@@ -48,8 +48,9 @@ const TaskExtraInfo = ({ task }: Props) => {
           </ModalHeader>
           <ModalBody>
             <TaskAttachment
+              title={<span className="mr-1 block text-base">上传</span>}
+              listClassName="min-h-40"
               task={task}
-              shouldRequest={isOpen}
             />
           </ModalBody>
         </ModalContent>
