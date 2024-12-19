@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 
 import { getLocalTimeZone } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Card, CardBody, CardFooter, CardHeader, ScrollShadow } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import classNames from "classnames";
-import SimpleBar from "simplebar-react";
 
 import { createTask, deleteTask, getTaskList, updateTask } from "@/api";
 import Empty from "@/components/empty";
 import NameInput from "@/components/name-input";
+import ScrollContainer from "@/components/scroll-container";
 import Spin from "@/components/spin";
 import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
@@ -75,11 +75,11 @@ const TaskList = ({ className }: Props) => {
         <TaskStatusTabs
           tabs={[
             {
-              label: `⏳ 进行中${inProgressTasks?.length ? `（${inProgressTasks.length}）` : ""}`,
+              label: `⏳ 进行中${inProgressTasks?.length ? `(${inProgressTasks.length})` : ""}`,
               key: "inProgress",
             },
             {
-              label: `✅ 已完成${completedTasks?.length ? `（${completedTasks.length}）` : ""}`,
+              label: `✅ 已完成${completedTasks?.length ? `(${completedTasks.length})` : ""}`,
               key: "completed",
             },
           ]}
@@ -92,61 +92,55 @@ const TaskList = ({ className }: Props) => {
           <SpinContainer loading={updateLoading}>
             {currentTasks?.length
               ? (
-                  <SimpleBar style={{ height: "100%" }}>
-                    {({ scrollableNodeRef, scrollableNodeProps, contentNodeRef, contentNodeProps }) => {
-                      return (
-                        <ScrollShadow ref={scrollableNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("p-2 h-full", scrollableNodeProps.className)}>
-                          <div ref={contentNodeRef as React.MutableRefObject<HTMLDivElement>} className={classNames("flex flex-col space-y-2", contentNodeProps.className)}>
-                            {currentTasks?.map(item => (
-                              <TaskListItem
-                                key={item.id}
-                                data={item}
-                                onUpdate={async (newData) => {
-                                  setUpdateLoading(true);
-                                  try {
-                                    await updateTask(currentTodoData.id!, item.id!, newData);
+                  <ScrollContainer>
+                    <div className="flex flex-col space-y-2 p-2">
+                      {currentTasks?.map(item => (
+                        <TaskListItem
+                          key={item.id}
+                          data={item}
+                          onUpdate={async (newData) => {
+                            setUpdateLoading(true);
+                            try {
+                              await updateTask(currentTodoData.id!, item.id!, newData);
 
-                                    await getTasks();
-                                  }
-                                  finally {
-                                    setUpdateLoading(false);
-                                  }
-                                }}
-                                onComplete={async () => {
-                                  setUpdateLoading(true);
-                                  try {
-                                    await updateTask(currentTodoData.id!, item.id!, {
-                                      status: "completed",
-                                      completedDateTime: {
-                                        dateTime: new Date().toISOString(),
-                                        timeZone: getLocalTimeZone(),
-                                      },
-                                    });
+                              await getTasks();
+                            }
+                            finally {
+                              setUpdateLoading(false);
+                            }
+                          }}
+                          onComplete={async () => {
+                            setUpdateLoading(true);
+                            try {
+                              await updateTask(currentTodoData.id!, item.id!, {
+                                status: "completed",
+                                completedDateTime: {
+                                  dateTime: new Date().toISOString(),
+                                  timeZone: getLocalTimeZone(),
+                                },
+                              });
 
-                                    await getTasks();
-                                  }
-                                  finally {
-                                    setUpdateLoading(false);
-                                  }
-                                }}
-                                onDelete={async () => {
-                                  setUpdateLoading(true);
-                                  try {
-                                    await deleteTask(currentTodoData.id!, item.id!);
+                              await getTasks();
+                            }
+                            finally {
+                              setUpdateLoading(false);
+                            }
+                          }}
+                          onDelete={async () => {
+                            setUpdateLoading(true);
+                            try {
+                              await deleteTask(currentTodoData.id!, item.id!);
 
-                                    await getTasks();
-                                  }
-                                  finally {
-                                    setUpdateLoading(false);
-                                  }
-                                }}
-                              />
-                            ))}
-                          </div>
-                        </ScrollShadow>
-                      );
-                    }}
-                  </SimpleBar>
+                              await getTasks();
+                            }
+                            finally {
+                              setUpdateLoading(false);
+                            }
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </ScrollContainer>
                 )
               : (
                   <Empty description="暂无任务" />

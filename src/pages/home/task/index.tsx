@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 
-import { CloseRemind } from "@icon-park/react";
+import { CloseRemind, Upload as UploadIcon } from "@icon-park/react";
 import type { ZonedDateTime } from "@internationalized/date";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
@@ -163,7 +163,28 @@ const Task = ({
                   );
                 }}
               />
-              <TaskAttachment title={<span className="text-sm">附件</span>} task={data} listClassName="max-h-40" />
+              <TaskAttachment
+                task={data}
+                listClassName="max-h-40"
+                uploadButton={(
+                  <div className="inline-flex cursor-pointer items-center space-x-2">
+                    <span className="text-sm">
+                      附件
+                    </span>
+                    <Button
+                      isIconOnly
+                      size="sm"
+                      variant="flat"
+                      color="primary"
+                      radius="full"
+                      className="h-5 min-h-5"
+                      onPressStart={e => e.continuePropagation()}
+                    >
+                      <UploadIcon />
+                    </Button>
+                  </div>
+                )}
+              />
             </SpinContainer>
           </ModalBody>
           {!isReadOnly

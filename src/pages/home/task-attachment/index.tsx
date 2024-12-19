@@ -1,21 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Upload } from "@icon-park/react";
 import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
-import { Button } from "@nextui-org/react";
-import SimpleBar from "simplebar-react";
 
 import { deleteAttachment, getAttachments as requestAttachment, uploadAttachment } from "@/api";
 import Empty from "@/components/empty";
 import FileItem from "@/components/file";
+import ScrollContainer from "@/components/scroll-container";
 import SpinContainer from "@/components/spin-container";
+import Upload from "@/components/upload";
 import { useTodoList } from "@/context";
 import { download } from "@/utils/download";
 
 interface Props {
   task: TodoTask;
+  uploadButton: React.ReactNode;
   listClassName?: string;
-  title?: React.ReactNode;
 }
 
 interface AttachmentState extends TaskFileAttachment {
@@ -25,9 +24,8 @@ interface AttachmentState extends TaskFileAttachment {
   file?: File;
 }
 
-const TaskAttachments = ({ title, task, listClassName }: Props) => {
+const TaskAttachments = ({ task, uploadButton, listClassName }: Props) => {
   const currentTodoData = useTodoList(store => store.currentTodoData);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [attachments, setAttachments] = useState<AttachmentState[]>([]);
   const count = useRef(0);
   const [loading, setLoading] = useState(false);
@@ -84,47 +82,31 @@ const TaskAttachments = ({ title, task, listClassName }: Props) => {
 
   return (
     <>
-      <div className="flex items-center space-x-2">
-        {title}
-        <Button
-          isIconOnly
-          size="sm"
-          variant="flat"
-          color="primary"
-          radius="full"
-          className="h-5 min-h-5"
-          onPress={() => inputRef.current?.click()}
-        >
-          <Upload />
-          <input
-            ref={inputRef}
-            type="file"
-            multiple={false}
-            className="hidden"
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
+      <Upload
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
 
-              const newAttachment: AttachmentState = {
-                tempId: `${Date.now()}#${count.current}`,
-                name: file?.name,
-                size: file?.size,
-                isUploading: true,
-                file,
-              };
-              count.current++;
+          const newAttachment: AttachmentState = {
+            tempId: `${Date.now()}#${count.current}`,
+            name: file?.name,
+            size: file?.size,
+            isUploading: true,
+            file,
+          };
+          count.current++;
 
-              setAttachments([
-                ...attachments,
-                newAttachment,
-              ]);
+          setAttachments([
+            ...attachments,
+            newAttachment,
+          ]);
 
-              await uploadFile(newAttachment);
-            }}
-          />
-        </Button>
-      </div>
+          await uploadFile(newAttachment);
+        }}
+      >
+        {uploadButton}
+      </Upload>
       <SpinContainer loading={loading}>
-        <SimpleBar className={listClassName} classNames={{ contentEl: "flex flex-col space-y-2" }}>
+        <ScrollContainer className={listClassName} classNames={{ contentEl: "flex flex-col space-y-2" }}>
           {attachments?.length
             ? attachments.map((attachment) => {
               return (
@@ -153,7 +135,7 @@ const TaskAttachments = ({ title, task, listClassName }: Props) => {
               );
             })
             : <Empty description="暂无附件" size="sm" />}
-        </SimpleBar>
+        </ScrollContainer>
       </SpinContainer>
     </>
   );

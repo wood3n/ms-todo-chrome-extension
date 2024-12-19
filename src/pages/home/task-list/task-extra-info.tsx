@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link as LinkIcon } from "@icon-park/react";
+import { Link as LinkIcon, Upload as UploadIcon } from "@icon-park/react";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { Button, CardFooter, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react";
 
@@ -43,14 +43,16 @@ const TaskExtraInfo = ({ task }: Props) => {
       </CardFooter>
       <Modal placement="center" isDismissable={false} scrollBehavior="inside" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          <ModalHeader>
-            附件
-          </ModalHeader>
-          <ModalBody>
+          <ModalHeader className="pb-2">附件</ModalHeader>
+          <ModalBody className="items-start pb-4">
             <TaskAttachment
-              title={<span className="mr-1 block text-base">上传</span>}
-              listClassName="min-h-40"
               task={task}
+              listClassName="max-h-60"
+              uploadButton={(
+                <Button size="sm" color="primary" startContent={<UploadIcon />} onPressStart={e => e.continuePropagation()}>
+                  上传
+                </Button>
+              )}
             />
           </ModalBody>
         </ModalContent>

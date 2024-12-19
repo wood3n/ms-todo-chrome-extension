@@ -52,7 +52,7 @@ const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage,
               )}
               <span className="truncate">{name || "unknown"}</span>
             </span>
-            <span className="flex-none">
+            <span className="flex-none text-gray-500" style={{ fontSize: 10 }}>
               {size && filesize(size)}
             </span>
           </div>
