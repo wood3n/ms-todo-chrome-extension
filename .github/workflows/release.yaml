@@ -36,6 +36,8 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm run build
+      - name: Zip dist
+        run: zip -r extension.zip dist
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
