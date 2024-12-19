@@ -57,6 +57,7 @@
     "@rsbuild/plugin-react": "^1.0.3",
     "@rsbuild/plugin-svgr": "^1.0.3",
     "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.12.10",
     "@types/react": "^18.3.1",

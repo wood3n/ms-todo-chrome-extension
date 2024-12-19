@@ -13,5 +13,6 @@ module.exports = {
         assets: ["extension.zip"],
       },
     ],
+    "@semantic-release/git",
   ],
 };
