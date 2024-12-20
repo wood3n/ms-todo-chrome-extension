@@ -7,6 +7,7 @@ import { launchWebAuthFlow } from "@/auth/chrome-identity";
 import { getLoginOutUrl } from "@/auth/ms-oauth";
 import AsyncButton from "@/components/async-button";
 import { useUser } from "@/context";
+import { clearBadge } from "@/utils/badge";
 
 function User() {
   const user = useUser(store => store.user);
@@ -40,15 +41,12 @@ function User() {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {onClose => (
             <>
               <ModalHeader className="flex flex-col gap-1">退出登录？</ModalHeader>
               <ModalFooter>
-                <Button color="primary" onPress={onClose}>
-                  取消
-                </Button>
                 <AsyncButton
                   color="danger"
                   onPress={async () => {
@@ -58,6 +56,8 @@ function User() {
 
                     await launchWebAuthFlow(logoutUrl);
 
+                    clearBadge();
+
                     onClose();
 
                     navigate("/login");
@@ -65,6 +65,9 @@ function User() {
                 >
                   确认
                 </AsyncButton>
+                <Button color="primary" onPress={onClose}>
+                  取消
+                </Button>
               </ModalFooter>
             </>
           )}

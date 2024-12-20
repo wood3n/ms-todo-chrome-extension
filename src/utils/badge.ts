@@ -4,3 +4,10 @@ export function updateBadge(taskNum: number) {
     text: String(taskNum),
   });
 }
+
+/** clear badge status */
+export function clearBadge() {
+  chrome.action.setBadgeText({
+    text: "",
+  });
+}

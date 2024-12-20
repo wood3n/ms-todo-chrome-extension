@@ -12,12 +12,10 @@ import ScrollContainer from "@/components/scroll-container";
 import Spin from "@/components/spin";
 import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
-import { updateBadge } from "@/utils/badge";
+import { clearBadge, updateBadge } from "@/utils/badge";
 
 import TaskListItem from "./list-item";
 import TaskStatusTabs, { type Status } from "./task-status-tabs";
-
-import "simplebar-react/dist/simplebar.min.css";
 
 interface Props {
   className?: string;
@@ -43,8 +41,13 @@ const TaskList = ({ className }: Props) => {
       if (currentTodoData.id === pinnedTodoData.id) {
         const inProgressTasks = res.value.filter(item => item.status !== "completed");
 
+        console.log(inProgressTasks);
+
         if (inProgressTasks?.length) {
           updateBadge(inProgressTasks.length);
+        }
+        else {
+          clearBadge();
         }
       }
     }

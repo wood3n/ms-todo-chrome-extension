@@ -1,4 +1,6 @@
 {
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
@@ -6,6 +8,7 @@
   // Auto fix
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit",
     "source.organizeImports": "never"
   },
 
@@ -40,5 +43,12 @@
     "gql",
     "graphql",
     "astro"
+  ],
+
+  "stylelint.enable": true,
+  "css.validate": false,
+  "stylelint.validate": [
+    "css",
+    "postcss"
   ]
 }

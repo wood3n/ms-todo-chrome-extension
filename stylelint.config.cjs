@@ -1,9 +1,8 @@
 /** @type {import('stylelint').Config} */
-export default {
+module.exports = {
   extends: "stylelint-config-standard",
-  plugins: ["stylelint-order", "stylelint-prettier"],
+  plugins: ["stylelint-order"],
   rules: {
-    "prettier/prettier": true,
     "order/order": ["custom-properties", "declarations"],
     "order/properties-order": ["width", "height"],
     "block-no-empty": true,
