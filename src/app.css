@@ -15,11 +15,11 @@ body {
 
 @layer components { 
   .login-gradient-bg {
-        background: hsl(209deg 80% 55% / 100%);
-        background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
-        background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
-        background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
-        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#3291E8", endColorstr="#4BAFED", GradientType=1 ); 
+    background: hsl(209deg 80% 55% / 100%);
+    background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
+    background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
+    background: radial-gradient(circle, hsl(209deg 80% 55% / 100%) 0%, hsl(203deg 82% 61% / 100%) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#3291E8", endColorstr="#4BAFED", GradientType=1 ); 
   }
-}
+} 
 

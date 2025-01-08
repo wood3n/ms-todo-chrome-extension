@@ -13,6 +13,7 @@
     "types": ["chrome-types"],
     "strict": true,
     "declaration": false,
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "skipLibCheck": true
   },
