@@ -12,6 +12,8 @@ import { msalInstance } from "./auth/ms-oauth";
 import Login from "./pages/login";
 import Main from "./pages/main";
 
+import "./locales/index.ts";
+
 import "./app.css";
 
 const router = createMemoryRouter([

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
@@ -15,6 +16,7 @@ interface Props {
 const EditItem = ({ data, isOpen, onOpenChange, onSubmit }: Props) => {
   const [value, setValue] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (data.displayName) {
@@ -38,7 +40,7 @@ const EditItem = ({ data, isOpen, onOpenChange, onSubmit }: Props) => {
   return (
     <Modal placement="center" isDismissable={false} isKeyboardDismissDisabled isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
-        <ModalHeader>编辑名称</ModalHeader>
+        <ModalHeader>{t("editTodoListName")}</ModalHeader>
         <ModalBody>
           <NameInput
             autoFocus
@@ -54,7 +56,7 @@ const EditItem = ({ data, isOpen, onOpenChange, onSubmit }: Props) => {
             color="primary"
             onClick={handleSubmit}
           >
-            保存
+            {t("save")}
           </Button>
         </ModalFooter>
       </ModalContent>

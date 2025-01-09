@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,6 +15,7 @@ import { getLoginInUrl } from "@/auth/ms-oauth";
 function SignInButton() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -28,7 +30,7 @@ function SignInButton() {
         });
       }
       else {
-        toast.error("登录失败，请重试");
+        toast.error(t("signError"));
       }
     }
     finally {
@@ -40,12 +42,13 @@ function SignInButton() {
     <Button
       color="primary"
       variant="faded"
+      radius="none"
       isLoading={loading}
       startContent={<MSIcon width={16} height={16} />}
       onClick={handleSignIn}
       className="border-1 border-gray-200 bg-white"
     >
-      Connect with Microsoft Account
+      {t("signIn")}
     </Button>
   );
 }

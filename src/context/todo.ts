@@ -22,13 +22,9 @@ export interface TodoListState {
   pinTodo: (id: string) => Promise<void>;
 }
 
-const requestTodoList = async (bypassChche = false) => {
+const requestTodoList = async () => {
   const response = await getTodoList({
     $top: 100,
-  }, {
-    cache: {
-      override: bypassChche,
-    },
   });
 
   return response?.value?.filter(item => item.wellknownListName !== "flaggedEmails");
@@ -84,14 +80,14 @@ export const useTodoList = create<TodoListState>()((set, get) => ({
   addTodo: async (displayName: string) => {
     await createTodoList({ displayName });
 
-    const todoList = await requestTodoList(true);
+    const todoList = await requestTodoList();
 
     set({ todoList });
   },
   updateTodo: async (id: string, displayName: string) => {
     await updateTodoList(id, { displayName });
 
-    const todoList = await requestTodoList(true);
+    const todoList = await requestTodoList();
 
     const currentTodoData = get().currentTodoData;
 
@@ -105,7 +101,7 @@ export const useTodoList = create<TodoListState>()((set, get) => ({
   deleteTodo: async (id: string) => {
     await deleteTodoList(id);
 
-    const todoList = await requestTodoList(true);
+    const todoList = await requestTodoList();
 
     const currentTodoData = get().currentTodoData;
 

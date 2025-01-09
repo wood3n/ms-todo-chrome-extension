@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
 
@@ -29,6 +30,7 @@ const TaskAttachments = ({ task, uploadButton, listClassName }: Props) => {
   const [attachments, setAttachments] = useState<AttachmentState[]>([]);
   const count = useRef(0);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const getAttachments = async () => {
     setLoading(true);
@@ -71,7 +73,7 @@ const TaskAttachments = ({ task, uploadButton, listClassName }: Props) => {
           return {
             ...item,
             isUploading: false,
-            uploadError: "上传出错，请重试",
+            uploadError: t("uploadError"),
           };
         }
 
@@ -134,7 +136,7 @@ const TaskAttachments = ({ task, uploadButton, listClassName }: Props) => {
                 />
               );
             })
-            : <Empty description="暂无附件" size="sm" />}
+            : <Empty description={t("noAttachment")} size="sm" />}
         </ScrollContainer>
       </SpinContainer>
     </>

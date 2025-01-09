@@ -1,4 +1,4 @@
-import http from "@/api/request";
+import axios from "@/api/axios";
 
 export function createDownloadLink(url: string, name?: string | null) {
   const link = document.createElement("a");
@@ -12,7 +12,7 @@ export function createDownloadLink(url: string, name?: string | null) {
 }
 
 export async function download(url: string, name?: string | null) {
-  const blob = await http.get<Blob>(url, {
+  const blob = await axios.get<Blob>(url, {
     responseType: "blob",
   });
 

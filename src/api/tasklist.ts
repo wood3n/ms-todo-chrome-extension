@@ -1,7 +1,7 @@
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
 
-import type { CommonQueryParams } from "./common";
-import request from "./request";
+import request from "./axios";
+import type { CommonQueryParams } from "./types";
 
 /**
  * https://learn.microsoft.com/zh-cn/graph/api/resources/todotask?view=graph-rest-1.0
