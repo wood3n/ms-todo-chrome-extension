@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Input, Kbd, Tooltip } from "@nextui-org/react";
 
@@ -13,12 +14,12 @@ interface Props {
 const NameInput = ({
   autoFocus,
   initialValue,
-  placeholder = "请输入",
+  placeholder,
   onChange,
   onSubmit,
 }: Props) => {
   const [innerValue, setInnerValue] = useState<string>();
-  const [isInvalid, setIsInvalid] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (initialValue) {
@@ -27,7 +28,7 @@ const NameInput = ({
   }, [initialValue]);
 
   const handlePressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !isInvalid) {
+    if (e.key === "Enter" && innerValue) {
       await onSubmit?.(innerValue!);
       setInnerValue("");
     }
@@ -42,15 +43,10 @@ const NameInput = ({
 
         setInnerValue(value);
         onChange?.(value);
-        setIsInvalid(!value?.trim());
       }}
-      onBlur={() => setIsInvalid(false)}
-      placeholder={placeholder}
-      endContent={<Tooltip content="回车键提交"><Kbd keys={["enter"]} /></Tooltip>}
+      placeholder={placeholder || t("Please enter")}
+      endContent={<Tooltip content={t("Enter key to submit")}><Kbd keys={["enter"]} /></Tooltip>}
       onKeyDown={handlePressEnter}
-      isInvalid={isInvalid}
-      color={isInvalid ? "danger" : "default"}
-      errorMessage="请输入有效的名称"
     />
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getLocalTimeZone } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
@@ -30,6 +31,7 @@ const TaskList = ({ className }: Props) => {
   const [initLoading, setInitLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [tasks, setTasks] = useState<TodoTask[]>();
+  const { t } = useTranslation();
 
   const getTasks = async () => {
     const res = await getTaskList(currentTodoData.id!, {
@@ -75,11 +77,11 @@ const TaskList = ({ className }: Props) => {
         <TaskStatusTabs
           tabs={[
             {
-              label: `⏳ 进行中${inProgressTasks?.length ? `(${inProgressTasks.length})` : ""}`,
+              label: `⏳ ${t("inProgress")}${inProgressTasks?.length ? `(${inProgressTasks.length})` : ""}`,
               key: "inProgress",
             },
             {
-              label: `✅ 已完成${completedTasks?.length ? `(${completedTasks.length})` : ""}`,
+              label: `✅ ${t("completed")}${completedTasks?.length ? `(${completedTasks.length})` : ""}`,
               key: "completed",
             },
           ]}
@@ -143,7 +145,7 @@ const TaskList = ({ className }: Props) => {
                   </ScrollContainer>
                 )
               : (
-                  <Empty description="暂无任务" />
+                  <Empty description={t("noTask")} />
                 )}
           </SpinContainer>
         </Spin>
@@ -152,18 +154,20 @@ const TaskList = ({ className }: Props) => {
         <CardFooter className="flex-none">
           <NameInput
             autoFocus
-            placeholder="添加任务"
+            placeholder={t("addTask")}
             onSubmit={async (title) => {
-              setUpdateLoading(true);
-              try {
-                await createTask(currentTodoData.id!, {
-                  title,
-                });
+              if (!updateLoading) {
+                setUpdateLoading(true);
+                try {
+                  await createTask(currentTodoData.id!, {
+                    title,
+                  });
 
-                await getTasks();
-              }
-              finally {
-                setUpdateLoading(false);
+                  await getTasks();
+                }
+                finally {
+                  setUpdateLoading(false);
+                }
               }
             }}
           />

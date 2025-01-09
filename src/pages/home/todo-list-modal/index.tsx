@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
@@ -23,6 +24,7 @@ const TodoListModal = ({ isOpen, onOpenChange }: Props) => {
   const createTodo = useTodoList(store => store.addTodo);
   const deleteTodo = useTodoList(store => store.deleteTodo);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -35,7 +37,7 @@ const TodoListModal = ({ isOpen, onOpenChange }: Props) => {
         {(onClose) => {
           return (
             <>
-              <ModalHeader className="pb-1">任务分类</ModalHeader>
+              <ModalHeader className="pb-1">{t("Task classification")}</ModalHeader>
               <SpinContainer loading={loading}>
                 <ModalBody className="p-2">
                   {todoList?.map(item => (
@@ -75,7 +77,7 @@ const TodoListModal = ({ isOpen, onOpenChange }: Props) => {
               </SpinContainer>
               <ModalFooter className="p-2">
                 <NameInput
-                  placeholder="添加任务分类"
+                  placeholder={t("Create Task classification")}
                   onSubmit={async (name) => {
                     setLoading(true);
                     try {
