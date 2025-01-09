@@ -156,16 +156,18 @@ const TaskList = ({ className }: Props) => {
             autoFocus
             placeholder={t("addTask")}
             onSubmit={async (title) => {
-              setUpdateLoading(true);
-              try {
-                await createTask(currentTodoData.id!, {
-                  title,
-                });
+              if (!updateLoading) {
+                setUpdateLoading(true);
+                try {
+                  await createTask(currentTodoData.id!, {
+                    title,
+                  });
 
-                await getTasks();
-              }
-              finally {
-                setUpdateLoading(false);
+                  await getTasks();
+                }
+                finally {
+                  setUpdateLoading(false);
+                }
               }
             }}
           />
