@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.0...v1.2.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* fix chrome permissions and task notifications ([5ef5f28](https://github.com/wood3n/ms-todo-chrome-extension/commit/5ef5f280646dd09a1d87bf7e4922c9e8de61ecf3))
+
 # [1.2.0](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.1.0...v1.2.0) (2025-01-09)
 
 
