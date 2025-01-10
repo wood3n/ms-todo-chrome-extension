@@ -14,7 +14,7 @@
   "side_panel": {
     "default_path": "index.html"
   },
-  "permissions": ["identity", "contextMenus", "storage", "notifications", "sidePanel", "alarms"],
+  "permissions": ["identity", "storage", "notifications", "sidePanel", "alarms"],
   "icons": {
     "16": "extension_icon@16px.png",
     "32": "extension_icon@32px.png",
