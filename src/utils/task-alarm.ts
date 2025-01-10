@@ -1,31 +1,34 @@
-import type { CalendarDateTime } from "@internationalized/date";
+import type { TodoTask } from "@microsoft/microsoft-graph-types";
+
+import { parseLocalDate, parseTimestamp } from "./date";
 
 interface CreateAlarmOptions {
-  taskId: string;
-  dateValue: CalendarDateTime;
+  task: TodoTask;
 }
 
-/**
- * 指定时间提醒
- */
-export class TaskAlarm {
-  constructor() {
-    chrome.alarms.onAlarm.addListener(this.handleAlarm);
-  }
+export async function createNotification({ task }: CreateAlarmOptions) {
+  const alarm = await chrome.alarms.get(task.id);
+  const when = parseTimestamp(parseLocalDate(task.reminderDateTime!.dateTime!));
 
-  handleAlarm(alarm: chrome.alarms.Alarm) {
-    chrome.notifications.create({
-      type: "basic",
-      title: "提醒",
-      message: `这是你的提醒，闹钟名：${alarm.name}`,
+  if (!alarm && when > Date.now()) {
+    chrome.alarms.onAlarm.addListener(() => {
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "extension_icon@128px.png",
+        title: task.title!,
+        message: "To Do",
+        priority: 2,
+      });
     });
-  }
 
-  create({ taskId, dateValue }: CreateAlarmOptions) {
-    chrome.alarms.create(taskId, { when: dateValue.millisecond });
+    chrome.alarms.create(task.id!, { when });
   }
+}
 
-  clear(taskId: string) {
+export async function clearNotification(taskId: string) {
+  const alarm = await chrome.alarms.get(taskId);
+
+  if (alarm) {
     chrome.alarms.clear(taskId);
   }
 }

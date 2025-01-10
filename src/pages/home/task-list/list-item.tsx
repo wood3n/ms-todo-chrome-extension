@@ -55,9 +55,8 @@ const TaskListItem = ({ data, onUpdate, onComplete, onDelete }: Props) => {
           onClose();
         }}
         onDelete={() => {
-          onClose();
-
           onDelete();
+          onClose();
         }}
       />
     </>

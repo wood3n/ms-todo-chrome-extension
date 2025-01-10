@@ -192,7 +192,6 @@ const Task = ({
           {!isReadOnly
           && (
             <ModalFooter>
-              <Button type="submit" color="primary" className="flex-1">{t("save")}</Button>
               <Button
                 color="danger"
                 className="flex-1"
@@ -200,6 +199,7 @@ const Task = ({
               >
                 {t("delete")}
               </Button>
+              <Button type="submit" color="primary" className="flex-1">{t("save")}</Button>
             </ModalFooter>
           )}
         </ModalContent>

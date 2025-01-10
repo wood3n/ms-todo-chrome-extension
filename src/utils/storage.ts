@@ -1,11 +1,5 @@
 export enum StorageKey {
   PinnedTodoId = "pinned-todo-id",
-  Account = "acount",
-  AccessToken = "access_token",
-  RefreshToken = "refresh_token",
-  User = "user",
-  TodoList = "todos",
-  TaskList = "tasks",
 }
 
 export async function storageSet(items: {

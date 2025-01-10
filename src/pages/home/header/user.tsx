@@ -60,6 +60,8 @@ function User() {
 
                     await launchWebAuthFlow(logoutUrl);
 
+                    await chrome.alarms.clearAll();
+
                     onClose();
 
                     navigate("/login");
