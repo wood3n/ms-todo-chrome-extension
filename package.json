@@ -1,7 +1,7 @@
 {
   "name": "mstodo",
   "type": "module",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "private": true,
   "description": "microsoft todo chrome extension",
   "author": "WangKai",

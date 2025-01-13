@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.2...v1.2.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* sidepanel service ([709cb0e](https://github.com/wood3n/ms-todo-chrome-extension/commit/709cb0eee2e125e32169f4db6c8eac4fabdc0ba8))
+
 ## [1.2.2](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.1...v1.2.2) (2025-01-13)
 
 
