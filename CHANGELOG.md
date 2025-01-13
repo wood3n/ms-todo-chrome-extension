@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.1...v1.2.2) (2025-01-13)
+
+
+### Bug Fixes
+
+* change extension info ([048c3ca](https://github.com/wood3n/ms-todo-chrome-extension/commit/048c3caf534865bb95ce71965452bc3a8f62e68c))
+
 ## [1.2.1](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.0...v1.2.1) (2025-01-10)
 
 
