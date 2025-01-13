@@ -14,6 +14,10 @@
   "side_panel": {
     "default_path": "index.html"
   },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "permissions": ["identity", "storage", "notifications", "sidePanel", "alarms"],
   "icons": {
     "16": "extension_icon@16px.png",

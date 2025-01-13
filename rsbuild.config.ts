@@ -13,7 +13,7 @@ export default defineConfig({
       image: "[name].[contenthash:8][ext]",
       media: "[name].[contenthash:8][ext]",
     },
-    copy: process.env.NODE_ENV === "development" ? [{ from: "./public", to: "" }] : undefined,
+    copy: [{ from: "./src/background.js", to: "" }].concat(process.env.NODE_ENV === "development" ? { from: "./public", to: "" } : []),
     sourceMap: {
       js: "inline-source-map",
     },
