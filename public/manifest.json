@@ -9,22 +9,18 @@
       "32": "extension_icon@32px.png",
       "48": "extension_icon@48px.png",
       "128": "extension_icon@128px.png"
-    },
-    "default_title": "点击打开Todo"
+    }
   },
   "side_panel": {
     "default_path": "index.html"
   },
-  "background": {
-    "service_worker": "background.js",
-    "type": "module"
-  },
-  "permissions": ["identity", "contextMenus", "storage", "notifications", "sidePanel", "alarms", "unlimitedStorage"],
+  "permissions": ["identity", "storage", "notifications", "sidePanel", "alarms"],
   "icons": {
     "16": "extension_icon@16px.png",
     "32": "extension_icon@32px.png",
     "48": "extension_icon@48px.png",
     "128": "extension_icon@128px.png"
   },
-  "host_permissions": ["https://*/*", "http://*/*"]
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "minimum_chrome_version": "120"
 }

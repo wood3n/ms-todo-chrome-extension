@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Delete, Edit, HomeTwo, Pin } from "@icon-park/react";
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
@@ -24,6 +25,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
   const [hovered, setHovered] = useState(false);
   const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { t } = useTranslation();
 
   const isPinned = data.id === pinnedTodoData.id;
   const isSelfCreated = data?.wellknownListName === "none";
@@ -57,7 +59,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
                 }}
           >
             {!isPinned && (
-              <Tooltip content="固定到首页" color="primary" closeDelay={0}>
+              <Tooltip content={t("Pin to homepage")} color="primary" closeDelay={0}>
                 <Button
                   isIconOnly
                   size="sm"
@@ -71,7 +73,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
             )}
             {isSelfCreated && (
               <>
-                <Tooltip content="修改" closeDelay={0}>
+                <Tooltip content={t("modify")} closeDelay={0}>
                   <Button
                     isIconOnly
                     size="sm"
@@ -81,7 +83,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
                     <Edit theme="outline" />
                   </Button>
                 </Tooltip>
-                <Tooltip content="删除" color="danger" closeDelay={0}>
+                <Tooltip content={t("delete")} color="danger" closeDelay={0}>
                   <Button
                     isIconOnly
                     size="sm"

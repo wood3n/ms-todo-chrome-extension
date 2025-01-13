@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Logout } from "@icon-park/react";
@@ -11,6 +12,7 @@ import { useUser } from "@/context";
 function User() {
   const user = useUser(store => store.user);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -36,18 +38,18 @@ function User() {
             startContent={<Logout theme="outline" />}
             onClick={onOpen}
           >
-            退出登录
+            {t("signOut")}
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal placement="center" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {onClose => (
             <>
-              <ModalHeader className="flex flex-col gap-1">退出登录？</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{t("confirmSignOut")}</ModalHeader>
               <ModalFooter>
                 <Button color="primary" onPress={onClose}>
-                  取消
+                  {t("cancel")}
                 </Button>
                 <AsyncButton
                   color="danger"
@@ -58,12 +60,14 @@ function User() {
 
                     await launchWebAuthFlow(logoutUrl);
 
+                    await chrome.alarms.clearAll();
+
                     onClose();
 
                     navigate("/login");
                   }}
                 >
-                  确认
+                  {t("confirm")}
                 </AsyncButton>
               </ModalFooter>
             </>

@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getLocalTimeZone } from "@internationalized/date";
-import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import { useRequest } from "ahooks";
 import classNames from "classnames";
 
 import { createTask, deleteTask, getTaskList, updateTask } from "@/api";
@@ -13,6 +14,7 @@ import Spin from "@/components/spin";
 import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
 import { updateBadge } from "@/utils/badge";
+import { clearNotification, createNotification } from "@/utils/task-alarm";
 
 import TaskListItem from "./list-item";
 import TaskStatusTabs, { type Status } from "./task-status-tabs";
@@ -27,41 +29,44 @@ const TaskList = ({ className }: Props) => {
   const currentTodoData = useTodoList(state => state.currentTodoData);
   const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const [status, setStatus] = useState<Status>("inProgress");
-  const [initLoading, setInitLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [tasks, setTasks] = useState<TodoTask[]>();
+  const { t } = useTranslation();
 
-  const getTasks = async () => {
-    const res = await getTaskList(currentTodoData.id!, {
-      $top: 200,
-      $orderby: `createdDateTime desc`,
-    });
+  const { data: tasks, loading: initLoading, refreshAsync } = useRequest(async () => {
+    if (currentTodoData?.id) {
+      const res = await getTaskList(currentTodoData.id!, {
+        $top: 200,
+        $orderby: `createdDateTime desc`,
+      });
 
-    if (res?.value) {
-      setTasks(res.value);
+      if (Array.isArray(res?.value)) {
+        if (currentTodoData.id === pinnedTodoData.id) {
+          const inProgressTasks = res.value.filter(item => item.status !== "completed");
 
-      if (currentTodoData.id === pinnedTodoData.id) {
-        const inProgressTasks = res.value.filter(item => item.status !== "completed");
+          if (inProgressTasks?.length) {
+            updateBadge(inProgressTasks.length);
 
-        if (inProgressTasks?.length) {
-          updateBadge(inProgressTasks.length);
+            inProgressTasks.forEach((task) => {
+              if (task.reminderDateTime?.dateTime) {
+                createNotification({ task });
+              }
+            });
+          }
         }
+
+        return res.value;
       }
     }
-  };
-
-  useEffect(() => {
-    if (currentTodoData?.id) {
-      setInitLoading(true);
-      getTasks().finally(() => {
-        setInitLoading(false);
-      });
+    else {
+      return [];
     }
-  }, [currentTodoData]);
+  }, {
+    refreshDeps: [currentTodoData.id],
+  });
 
   const inProgressTasks = useMemo(() => {
     return tasks?.filter(item => item.status !== "completed");
-  }, [tasks, currentTodoData, pinnedTodoData]);
+  }, [tasks]);
 
   const completedTasks = useMemo(() => {
     return tasks?.filter(item => item.status === "completed");
@@ -75,11 +80,11 @@ const TaskList = ({ className }: Props) => {
         <TaskStatusTabs
           tabs={[
             {
-              label: `⏳ 进行中${inProgressTasks?.length ? `(${inProgressTasks.length})` : ""}`,
+              label: `⏳ ${t("inProgress")}${inProgressTasks?.length ? `(${inProgressTasks.length})` : ""}`,
               key: "inProgress",
             },
             {
-              label: `✅ 已完成${completedTasks?.length ? `(${completedTasks.length})` : ""}`,
+              label: `✅ ${t("completed")}${completedTasks?.length ? `(${completedTasks.length})` : ""}`,
               key: "completed",
             },
           ]}
@@ -103,7 +108,7 @@ const TaskList = ({ className }: Props) => {
                             try {
                               await updateTask(currentTodoData.id!, item.id!, newData);
 
-                              await getTasks();
+                              await refreshAsync();
                             }
                             finally {
                               setUpdateLoading(false);
@@ -120,7 +125,9 @@ const TaskList = ({ className }: Props) => {
                                 },
                               });
 
-                              await getTasks();
+                              await refreshAsync();
+
+                              await clearNotification(item.id!);
                             }
                             finally {
                               setUpdateLoading(false);
@@ -131,7 +138,9 @@ const TaskList = ({ className }: Props) => {
                             try {
                               await deleteTask(currentTodoData.id!, item.id!);
 
-                              await getTasks();
+                              await refreshAsync();
+
+                              await clearNotification(item.id!);
                             }
                             finally {
                               setUpdateLoading(false);
@@ -143,7 +152,7 @@ const TaskList = ({ className }: Props) => {
                   </ScrollContainer>
                 )
               : (
-                  <Empty description="暂无任务" />
+                  <Empty description={t("noTask")} />
                 )}
           </SpinContainer>
         </Spin>
@@ -152,18 +161,20 @@ const TaskList = ({ className }: Props) => {
         <CardFooter className="flex-none">
           <NameInput
             autoFocus
-            placeholder="添加任务"
+            placeholder={t("addTask")}
             onSubmit={async (title) => {
-              setUpdateLoading(true);
-              try {
-                await createTask(currentTodoData.id!, {
-                  title,
-                });
+              if (!updateLoading) {
+                setUpdateLoading(true);
+                try {
+                  await createTask(currentTodoData.id!, {
+                    title,
+                  });
 
-                await getTasks();
-              }
-              finally {
-                setUpdateLoading(false);
+                  await refreshAsync();
+                }
+                finally {
+                  setUpdateLoading(false);
+                }
               }
             }}
           />

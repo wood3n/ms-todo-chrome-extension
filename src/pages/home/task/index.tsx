@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { CloseRemind, Upload as UploadIcon } from "@icon-park/react";
 import type { ZonedDateTime } from "@internationalized/date";
@@ -39,6 +40,7 @@ const Task = ({
   onDelete,
 }: Props) => {
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const isReadOnly = data?.status === "completed";
 
@@ -86,23 +88,23 @@ const Task = ({
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContent>
-          <ModalHeader>任务信息</ModalHeader>
+          <ModalHeader>{t("taskInfo")}</ModalHeader>
           <ModalBody>
             <SpinContainer loading={loading} className="flex flex-col space-y-4 overflow-y-hidden">
               <Controller
                 name="title"
                 control={control}
                 rules={{
-                  required: "请输入任务标题",
+                  required: t("enterTaskTitle"),
                 }}
                 render={({ field, fieldState }) => {
                   return (
                     <Input
-                      label="标题"
+                      label={t("title")}
                       isRequired
                       labelPlacement="outside"
                       isReadOnly={isReadOnly}
-                      placeholder="请输入内容标题"
+                      placeholder={t("enterTaskTitle")}
                       isInvalid={fieldState.invalid}
                       errorMessage={fieldState?.error?.message}
                       value={field.value}
@@ -112,8 +114,8 @@ const Task = ({
                 }}
               />
               <Textarea
-                label="备注"
-                placeholder="请输入备注"
+                label={t("remark")}
+                placeholder={t("enterRemark")}
                 labelPlacement="outside"
                 readOnly={isReadOnly}
                 {...register("body.content")}
@@ -129,12 +131,12 @@ const Task = ({
                       isReadOnly={isReadOnly}
                       label={(
                         <div>
-                          提醒时间
-                          {isOutDate && <Chip color="warning" variant="light">已过期</Chip>}
+                          {t("reminderTime")}
+                          {isOutDate && <Chip color="warning" variant="light">{t("expired")}</Chip>}
                         </div>
                       )}
                       startContent={!isReadOnly && value && (
-                        <Tooltip content="取消提醒" closeDelay={0} size="sm">
+                        <Tooltip content={t("cancelReminder")} closeDelay={0} size="sm">
                           <Button
                             onClick={() => {
                               setValue("reminderDateTime.dateValue", null);
@@ -169,7 +171,7 @@ const Task = ({
                 uploadButton={(
                   <div className="inline-flex cursor-pointer items-center space-x-2">
                     <span className="text-sm">
-                      附件
+                      {t("attachment")}
                     </span>
                     <Button
                       isIconOnly
@@ -190,14 +192,14 @@ const Task = ({
           {!isReadOnly
           && (
             <ModalFooter>
-              <Button type="submit" color="primary" className="flex-1">保 存</Button>
               <Button
                 color="danger"
                 className="flex-1"
                 onClick={onDelete}
               >
-                删 除
+                {t("delete")}
               </Button>
+              <Button type="submit" color="primary" className="flex-1">{t("save")}</Button>
             </ModalFooter>
           )}
         </ModalContent>

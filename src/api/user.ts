@@ -1,6 +1,6 @@
 import type { User } from "@microsoft/microsoft-graph-types";
 
-import http from "./request";
+import http from "./axios";
 
 /** 获取用户信息 */
 export const getUser = () => http.get<User>("/me");

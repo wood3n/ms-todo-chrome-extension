@@ -1,8 +1,8 @@
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
 import type { AxiosRequestConfig } from "axios";
 
-import type { CommonQueryParams } from "./common";
-import http from "./request";
+import http from "./axios";
+import type { CommonQueryParams } from "./types";
 
 export interface TodoResponse {
   value: TodoTaskList[];

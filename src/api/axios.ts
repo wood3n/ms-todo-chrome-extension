@@ -7,7 +7,7 @@ import { acquireToken } from "@/auth/ms-oauth";
 
 declare module "axios" {
   /**
-   * 自定义配置参数
+   * custom config
    */
   export interface AxiosRequestConfig {
     /** keep native response */
@@ -28,11 +28,11 @@ declare module "axios" {
 /**
  * https://learn.microsoft.com/zh-cn/graph/use-the-api
  */
-const http = axios.create({
+const instance = axios.create({
   baseURL: "https://graph.microsoft.com/v1.0",
 });
 
-http.interceptors.request.use(
+instance.interceptors.request.use(
   async (config) => {
     const res = await acquireToken();
 
@@ -47,7 +47,7 @@ http.interceptors.request.use(
   },
 );
 
-http.interceptors.response.use((response) => {
+instance.interceptors.response.use((response) => {
   if (response.config.keepNative) {
     return response;
   }
@@ -62,4 +62,4 @@ http.interceptors.response.use((response) => {
   return Promise.reject(error);
 });
 
-export default http;
+export default instance;
