@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Microsoft Todo",
-  "description": "Microsoft Todo App Chrome Extension",
+  "name": "MS Todo",
+  "description": "Manage your Microsoft To Do data",
   "version": "1.0",
   "action": {
     "default_icon": {
