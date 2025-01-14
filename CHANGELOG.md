@@ -1,3 +1,11 @@
+## [1.2.4](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.3...v1.2.4) (2025-01-14)
+
+
+### Bug Fixes
+
+* fix task list style ([d33a15d](https://github.com/wood3n/ms-todo-chrome-extension/commit/d33a15d603f0fe68017a35251f8d1171cd1b889a))
+* fix task list style ([ed14a06](https://github.com/wood3n/ms-todo-chrome-extension/commit/ed14a06fb09b8dda7e89700da0babf76820c710f))
+
 ## [1.2.3](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.2...v1.2.3) (2025-01-13)
 
 
