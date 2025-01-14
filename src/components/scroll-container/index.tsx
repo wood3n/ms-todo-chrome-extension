@@ -4,7 +4,7 @@ import SimpleBar, { type Props } from "simplebar-react";
 
 const ScrollContainer = (props: Props) => {
   return (
-    <SimpleBar {...props} style={{ height: "100%" }} />
+    <SimpleBar style={{ height: "100%" }} {...props} />
   );
 };
 

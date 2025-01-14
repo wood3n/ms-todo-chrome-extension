@@ -7,11 +7,11 @@ import { CloseRemind, Upload as UploadIcon } from "@icon-park/react";
 import type { ZonedDateTime } from "@internationalized/date";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
+import { Button, Chip, DatePicker, Input, Modal, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
 
+import ScrollContainer from "@/components/scroll-container";
 import { parseLocalDate, parseTimestamp, parseUTCTimeStr } from "@/utils/date";
 
-import SpinContainer from "../../../components/spin-container";
 import TaskAttachment from "../task-attachment";
 
 interface Props {
@@ -86,109 +86,113 @@ const Task = ({
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <ModalContent>
-          <ModalHeader>{t("taskInfo")}</ModalHeader>
-          <ModalBody>
-            <SpinContainer loading={loading} className="flex flex-col space-y-4 overflow-y-hidden">
-              <Controller
-                name="title"
-                control={control}
-                rules={{
-                  required: t("enterTaskTitle"),
-                }}
-                render={({ field, fieldState }) => {
-                  return (
-                    <Input
-                      label={t("title")}
-                      isRequired
-                      labelPlacement="outside"
-                      isReadOnly={isReadOnly}
-                      placeholder={t("enterTaskTitle")}
-                      isInvalid={fieldState.invalid}
-                      errorMessage={fieldState?.error?.message}
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  );
-                }}
-              />
-              <Textarea
-                label={t("remark")}
-                placeholder={t("enterRemark")}
-                labelPlacement="outside"
-                readOnly={isReadOnly}
-                {...register("body.content")}
-              />
-              <Controller
-                name="reminderDateTime.dateValue"
-                control={control}
-                render={({ field: { onChange, value } }) => {
-                  const isOutDate = value && (parseTimestamp(value) < Date.now());
 
-                  return (
-                    <DatePicker
-                      isReadOnly={isReadOnly}
-                      label={(
-                        <div>
-                          {t("reminderTime")}
-                          {isOutDate && <Chip color="warning" variant="light">{t("expired")}</Chip>}
-                        </div>
-                      )}
-                      startContent={!isReadOnly && value && (
-                        <Tooltip content={t("cancelReminder")} closeDelay={0} size="sm">
-                          <Button
-                            onClick={() => {
-                              setValue("reminderDateTime.dateValue", null);
-                            }}
-                            isIconOnly
-                            radius="full"
-                            size="sm"
-                            variant="flat"
-                            className="h-6 min-h-6 w-6 min-w-6"
-                          >
-                            <CloseRemind fill="currentColor" />
-                          </Button>
-                        </Tooltip>
-                      )}
-                      labelPlacement="outside"
-                      value={value}
-                      color={isOutDate ? "warning" : "default"}
-                      onChange={onChange}
-                      showMonthAndYearPickers
-                      hideTimeZone
-                      hourCycle={24}
-                      isInvalid={false}
-                      minValue={today(getLocalTimeZone())}
-                      granularity="minute"
-                    />
-                  );
-                }}
-              />
-              <TaskAttachment
-                task={data}
-                listClassName="max-h-40"
-                uploadButton={(
-                  <div className="inline-flex cursor-pointer items-center space-x-2">
-                    <span className="text-sm">
-                      {t("attachment")}
-                    </span>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="flat"
-                      color="primary"
-                      radius="full"
-                      className="h-5 min-h-5"
-                      onPressStart={e => e.continuePropagation()}
-                    >
-                      <UploadIcon />
-                    </Button>
-                  </div>
-                )}
-              />
-            </SpinContainer>
-          </ModalBody>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalContent className="overflow-hidden">
+          <ModalHeader>{t("taskInfo")}</ModalHeader>
+          <ScrollContainer
+            className="min-h-0 flex-1 px-6 py-2"
+            classNames={{
+              contentEl: "flex flex-col space-y-2",
+            }}
+          >
+            <Controller
+              name="title"
+              control={control}
+              rules={{
+                required: t("enterTaskTitle"),
+              }}
+              render={({ field, fieldState }) => {
+                return (
+                  <Input
+                    label={t("title")}
+                    isRequired
+                    labelPlacement="outside"
+                    isReadOnly={isReadOnly}
+                    placeholder={t("enterTaskTitle")}
+                    isInvalid={fieldState.invalid}
+                    errorMessage={fieldState?.error?.message}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                );
+              }}
+            />
+            <Textarea
+              label={t("remark")}
+              placeholder={t("enterRemark")}
+              labelPlacement="outside"
+              readOnly={isReadOnly}
+              {...register("body.content")}
+            />
+            <Controller
+              name="reminderDateTime.dateValue"
+              control={control}
+              render={({ field: { onChange, value } }) => {
+                const isOutDate = value && (parseTimestamp(value) < Date.now());
+
+                return (
+                  <DatePicker
+                    isReadOnly={isReadOnly}
+                    label={(
+                      <div>
+                        {t("reminderTime")}
+                        {isOutDate && <Chip color="warning" variant="light">{t("expired")}</Chip>}
+                      </div>
+                    )}
+                    startContent={!isReadOnly && value && (
+                      <Tooltip content={t("cancelReminder")} closeDelay={0} size="sm">
+                        <Button
+                          onClick={() => {
+                            setValue("reminderDateTime.dateValue", null);
+                          }}
+                          isIconOnly
+                          radius="full"
+                          size="sm"
+                          variant="flat"
+                          className="h-6 min-h-6 w-6 min-w-6"
+                        >
+                          <CloseRemind fill="currentColor" />
+                        </Button>
+                      </Tooltip>
+                    )}
+                    labelPlacement="outside"
+                    value={value}
+                    color={isOutDate ? "warning" : "default"}
+                    onChange={onChange}
+                    showMonthAndYearPickers
+                    hideTimeZone
+                    hourCycle={24}
+                    isInvalid={false}
+                    minValue={today(getLocalTimeZone())}
+                    granularity="minute"
+                  />
+                );
+              }}
+            />
+            <TaskAttachment
+              task={data}
+              listClassName="max-h-40"
+              uploadButton={(
+                <div className="inline-flex cursor-pointer items-center space-x-2">
+                  <span className="text-sm">
+                    {t("attachment")}
+                  </span>
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    variant="flat"
+                    color="primary"
+                    radius="full"
+                    className="h-5 min-h-5"
+                    onPressStart={e => e.continuePropagation()}
+                  >
+                    <UploadIcon />
+                  </Button>
+                </div>
+              )}
+            />
+          </ScrollContainer>
           {!isReadOnly
           && (
             <ModalFooter>
@@ -196,10 +200,18 @@ const Task = ({
                 color="danger"
                 className="flex-1"
                 onClick={onDelete}
+                isLoading={loading}
               >
                 {t("delete")}
               </Button>
-              <Button type="submit" color="primary" className="flex-1">{t("save")}</Button>
+              <Button
+                type="submit"
+                color="primary"
+                isLoading={loading}
+                className="flex-1"
+              >
+                {t("save")}
+              </Button>
             </ModalFooter>
           )}
         </ModalContent>

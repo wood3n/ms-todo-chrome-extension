@@ -10,7 +10,6 @@ import { createTask, deleteTask, getTaskList, updateTask } from "@/api";
 import Empty from "@/components/empty";
 import NameInput from "@/components/name-input";
 import ScrollContainer from "@/components/scroll-container";
-import Spin from "@/components/spin";
 import SpinContainer from "@/components/spin-container";
 import { useTodoList } from "@/context";
 import { updateBadge } from "@/utils/badge";
@@ -29,10 +28,9 @@ const TaskList = ({ className }: Props) => {
   const currentTodoData = useTodoList(state => state.currentTodoData);
   const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const [status, setStatus] = useState<Status>("inProgress");
-  const [updateLoading, setUpdateLoading] = useState(false);
   const { t } = useTranslation();
 
-  const { data: tasks, loading: initLoading, refreshAsync } = useRequest(async () => {
+  const { data: tasks, refreshAsync, loading } = useRequest(async () => {
     if (currentTodoData?.id) {
       const res = await getTaskList(currentTodoData.id!, {
         $top: 200,
@@ -93,69 +91,49 @@ const TaskList = ({ className }: Props) => {
         />
       </CardHeader>
       <CardBody className="p-0">
-        <Spin loading={initLoading}>
-          <SpinContainer loading={updateLoading}>
-            {currentTasks?.length
-              ? (
-                  <ScrollContainer>
-                    <div className="flex flex-col space-y-2 p-2">
-                      {currentTasks?.map(item => (
-                        <TaskListItem
-                          key={item.id}
-                          data={item}
-                          onUpdate={async (newData) => {
-                            setUpdateLoading(true);
-                            try {
-                              await updateTask(currentTodoData.id!, item.id!, newData);
+        <SpinContainer loading={loading}>
+          {currentTasks?.length
+            ? (
+                <ScrollContainer>
+                  <div className="flex flex-col space-y-2 p-2">
+                    {currentTasks?.map(item => (
+                      <TaskListItem
+                        key={item.id}
+                        data={item}
+                        onUpdate={async (newData) => {
+                          await updateTask(currentTodoData.id!, item.id!, newData);
 
-                              await refreshAsync();
-                            }
-                            finally {
-                              setUpdateLoading(false);
-                            }
-                          }}
-                          onComplete={async () => {
-                            setUpdateLoading(true);
-                            try {
-                              await updateTask(currentTodoData.id!, item.id!, {
-                                status: "completed",
-                                completedDateTime: {
-                                  dateTime: new Date().toISOString(),
-                                  timeZone: getLocalTimeZone(),
-                                },
-                              });
+                          await refreshAsync();
+                        }}
+                        onComplete={async () => {
+                          await updateTask(currentTodoData.id!, item.id!, {
+                            status: "completed",
+                            completedDateTime: {
+                              dateTime: new Date().toISOString(),
+                              timeZone: getLocalTimeZone(),
+                            },
+                          });
 
-                              await refreshAsync();
+                          await clearNotification(item.id!);
 
-                              await clearNotification(item.id!);
-                            }
-                            finally {
-                              setUpdateLoading(false);
-                            }
-                          }}
-                          onDelete={async () => {
-                            setUpdateLoading(true);
-                            try {
-                              await deleteTask(currentTodoData.id!, item.id!);
+                          await refreshAsync();
+                        }}
+                        onDelete={async () => {
+                          await deleteTask(currentTodoData.id!, item.id!);
 
-                              await refreshAsync();
+                          await clearNotification(item.id!);
 
-                              await clearNotification(item.id!);
-                            }
-                            finally {
-                              setUpdateLoading(false);
-                            }
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </ScrollContainer>
-                )
-              : (
-                  <Empty description={t("noTask")} />
-                )}
-          </SpinContainer>
-        </Spin>
+                          await refreshAsync();
+                        }}
+                      />
+                    ))}
+                  </div>
+                </ScrollContainer>
+              )
+            : (
+                <Empty description={t("noTask")} />
+              )}
+        </SpinContainer>
       </CardBody>
       {Boolean(currentTodoData?.id) && status === "inProgress" && (
         <CardFooter className="flex-none">
@@ -163,18 +141,12 @@ const TaskList = ({ className }: Props) => {
             autoFocus
             placeholder={t("addTask")}
             onSubmit={async (title) => {
-              if (!updateLoading) {
-                setUpdateLoading(true);
-                try {
-                  await createTask(currentTodoData.id!, {
-                    title,
-                  });
+              if (!loading) {
+                await createTask(currentTodoData.id!, {
+                  title,
+                });
 
-                  await refreshAsync();
-                }
-                finally {
-                  setUpdateLoading(false);
-                }
+                await refreshAsync();
               }
             }}
           />
