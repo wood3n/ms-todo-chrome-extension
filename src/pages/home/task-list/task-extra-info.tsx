@@ -24,8 +24,7 @@ const TaskExtraInfo = ({ task }: Props) => {
         <span>
           {task?.reminderDateTime?.dateTime && (
             <Chip variant="flat" radius="sm" size="sm" color="warning">
-              ⏰
-              {" "}
+              <span className="mr-1 inline-block">⏰</span>
               {formatISOTime(task.reminderDateTime.dateTime)}
             </Chip>
           )}
