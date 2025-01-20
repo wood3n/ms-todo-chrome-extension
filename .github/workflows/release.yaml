@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - master # or main
+    paths:
+      - "src/**"
+      - "public/**"
 
 permissions:
   contents: read # for checkout

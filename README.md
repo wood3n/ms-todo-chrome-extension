@@ -4,7 +4,9 @@
   <img src="./public//favicon.svg" width="128px">
 </p>
 
-<a href="https://chromewebstore.google.com/">
+# Install
+
+<a href="https://chromewebstore.google.com/detail/ms-todo/ngcncmglifogcgmddpepdihnkgagfjga?authuser=1&hl=zh-CN">
   <img src="./store.png">
 </a>
 
