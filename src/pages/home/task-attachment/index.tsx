@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { TaskFileAttachment, TodoTask } from "@microsoft/microsoft-graph-types";
+import classNames from "classnames";
 
 import { deleteAttachment, getAttachments as requestAttachment, uploadAttachment } from "@/api";
 import Empty from "@/components/empty";
@@ -108,35 +109,36 @@ const TaskAttachments = ({ task, uploadButton, listClassName }: Props) => {
         {uploadButton}
       </Upload>
       <SpinContainer loading={loading}>
-        <ScrollContainer className={listClassName} classNames={{ contentEl: "flex flex-col space-y-2" }}>
-          {attachments?.length
-            ? attachments.map((attachment) => {
-              return (
-                <FileItem
-                  key={attachment.id}
-                  name={attachment.name!}
-                  size={attachment.size}
-                  isUploading={attachment.isUploading}
-                  onDownload={async () => {
-                    if (attachment.id) {
-                      await download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
-                    }
-                  }}
-                  onDelete={async () => {
-                    if (attachment.tempId) {
-                      setAttachments(old => old.filter(_item => _item.tempId === attachment.tempId));
-                    }
-                    else {
-                      await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
+        <ScrollContainer>
+          <div className={classNames("flex flex-col space-y-2", listClassName)}>
+            {attachments?.length
+              ? attachments.map((attachment) => {
+                  return (
+                    <FileItem
+                      key={attachment.id}
+                      name={attachment.name!}
+                      size={attachment.size}
+                      isUploading={attachment.isUploading}
+                      onDownload={async () => {
+                        if (attachment.id) {
+                          await download(`/me/todo/lists/${currentTodoData.id}/tasks/${task.id}/attachments/${attachment.id}/$value`, attachment.name);
+                        }
+                      }}
+                      onDelete={async () => {
+                        if (attachment.tempId) {
+                          setAttachments(old => old.filter(_item => _item.tempId === attachment.tempId));
+                        }
+                        else {
+                          await deleteAttachment(currentTodoData.id!, task.id!, attachment.id!);
 
-                      await getAttachments();
-                    }
-                  }}
-                  className="shrink-0 grow basis-auto"
-                />
-              );
-            })
-            : <Empty description={t("noAttachment")} size="sm" />}
+                          await getAttachments();
+                        }
+                      }}
+                    />
+                  );
+                })
+              : <Empty description={t("noAttachment")} size="sm" />}
+          </div>
         </ScrollContainer>
       </SpinContainer>
     </>

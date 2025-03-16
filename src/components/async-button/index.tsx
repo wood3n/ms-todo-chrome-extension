@@ -1,12 +1,11 @@
+import { Button, type ButtonProps } from "@nextui-org/react";
 import { forwardRef, useState } from "react";
 
-import { Button, type ButtonProps } from "@nextui-org/react";
-
-const AsyncButton = forwardRef<HTMLButtonElement, ButtonProps>(({ onClick, ...props }, ref) => {
+const AsyncButton = forwardRef<HTMLButtonElement, ButtonProps>(({ onPress, ...props }, ref) => {
   const [loading, setLoading] = useState(false);
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    const result = onClick?.(e);
+  const handleClick: ButtonProps["onPress"] = (e) => {
+    const result = onPress?.(e);
 
     // @ts-ignore
     if (result instanceof Promise) {
@@ -17,7 +16,7 @@ const AsyncButton = forwardRef<HTMLButtonElement, ButtonProps>(({ onClick, ...pr
     }
   };
 
-  return <Button ref={ref} {...props} isLoading={loading} onClick={handleClick} />;
+  return <Button ref={ref} {...props} isLoading={loading} onPress={handleClick} />;
 });
 
 export default AsyncButton;

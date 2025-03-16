@@ -1,8 +1,8 @@
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getLocalTimeZone } from "@internationalized/date";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { useRequest } from "ahooks";
 import classNames from "classnames";
 
@@ -17,8 +17,6 @@ import { clearNotification, createNotification } from "@/utils/task-alarm";
 
 import TaskListItem from "./list-item";
 import TaskStatusTabs, { type Status } from "./task-status-tabs";
-
-import "simplebar-react/dist/simplebar.min.css";
 
 interface Props {
   className?: string;
@@ -41,15 +39,13 @@ const TaskList = ({ className }: Props) => {
         if (currentTodoData.id === pinnedTodoData.id) {
           const inProgressTasks = res.value.filter(item => item.status !== "completed");
 
-          if (inProgressTasks?.length) {
-            updateBadge(inProgressTasks.length);
+          updateBadge(inProgressTasks?.length || "");
 
-            inProgressTasks.forEach((task) => {
-              if (task.reminderDateTime?.dateTime) {
-                createNotification({ task });
-              }
-            });
-          }
+          inProgressTasks?.forEach((task) => {
+            if (task.reminderDateTime?.dateTime) {
+              createNotification({ task });
+            }
+          });
         }
 
         return res.value;
@@ -74,7 +70,7 @@ const TaskList = ({ className }: Props) => {
 
   return (
     <Card className={classNames("h-full", className)} shadow="sm">
-      <CardHeader className="flex flex-col px-2 pb-0 pt-2">
+      <CardHeader className="flex flex-col p-1">
         <TaskStatusTabs
           tabs={[
             {
@@ -94,8 +90,8 @@ const TaskList = ({ className }: Props) => {
         <SpinContainer loading={loading}>
           {currentTasks?.length
             ? (
-                <ScrollContainer>
-                  <div className="flex flex-col space-y-2 p-2">
+                <ScrollContainer className="p-2">
+                  <div className="flex flex-col space-y-2">
                     {currentTasks?.map(item => (
                       <TaskListItem
                         key={item.id}

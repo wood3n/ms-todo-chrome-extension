@@ -1,13 +1,13 @@
+import { CloseRemind, Upload as UploadIcon } from "@icon-park/react";
+import { Button, Chip, DatePicker, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
 import React, { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { CloseRemind, Upload as UploadIcon } from "@icon-park/react";
 import type { ZonedDateTime } from "@internationalized/date";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Button, Chip, DatePicker, Input, Modal, ModalContent, ModalFooter, ModalHeader, Textarea, Tooltip } from "@nextui-org/react";
 
 import ScrollContainer from "@/components/scroll-container";
 import { parseLocalDate, parseTimestamp, parseUTCTimeStr } from "@/utils/date";
@@ -90,12 +90,7 @@ const Task = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalContent className="overflow-hidden">
           <ModalHeader>{t("taskInfo")}</ModalHeader>
-          <ScrollContainer
-            className="min-h-0 flex-1 px-6 py-2"
-            classNames={{
-              contentEl: "flex flex-col space-y-2",
-            }}
-          >
+          <ModalBody className="flex flex-col space-y-1">
             <Controller
               name="title"
               control={control}
@@ -172,7 +167,7 @@ const Task = ({
             />
             <TaskAttachment
               task={data}
-              listClassName="max-h-40"
+              listClassName="p-1 overflow-y-auto"
               uploadButton={(
                 <div className="inline-flex cursor-pointer items-center space-x-2">
                   <span className="text-sm">
@@ -192,7 +187,7 @@ const Task = ({
                 </div>
               )}
             />
-          </ScrollContainer>
+          </ModalBody>
           {!isReadOnly
           && (
             <ModalFooter>

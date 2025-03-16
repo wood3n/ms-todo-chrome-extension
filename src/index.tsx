@@ -1,5 +1,6 @@
-import { type AuthenticationResult, type EventMessage, EventType } from "@azure/msal-browser";
 import ReactDOM from "react-dom/client";
+
+import { type AuthenticationResult, type EventMessage, EventType } from "@azure/msal-browser";
 
 import App from "./app";
 import { msalInstance } from "./auth/ms-oauth";

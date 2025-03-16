@@ -1,6 +1,5 @@
-import React from "react";
-
 import { Tab, Tabs } from "@nextui-org/react";
+import React from "react";
 
 export type Status = "inProgress" | "completed";
 

@@ -1,13 +1,14 @@
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-
 import { Logout } from "@icon-park/react";
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure, User as UserChip } from "@nextui-org/react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { launchWebAuthFlow } from "@/auth/chrome-identity";
 import { getLoginOutUrl } from "@/auth/ms-oauth";
 import AsyncButton from "@/components/async-button";
 import { useUser } from "@/context";
+
+import ThemeSwitch from "./theme-switch";
 
 function User() {
   const user = useUser(store => store.user);
@@ -23,7 +24,7 @@ function User() {
           <Avatar isBordered src={user?.avatar} className="cursor-pointer" />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
-          <DropdownItem>
+          <DropdownItem key="userInfo">
             <UserChip
               name={user?.preferredLanguage === "zh-CN" ? `${user?.surname ?? ""}${user?.givenName ?? ""}` : user?.displayName ?? "unknown"}
               description={user?.mail}
@@ -31,6 +32,9 @@ function User() {
                 src: user?.avatar,
               }}
             />
+          </DropdownItem>
+          <DropdownItem key="toggleMode">
+            <ThemeSwitch />
           </DropdownItem>
           <DropdownItem
             key="logout"

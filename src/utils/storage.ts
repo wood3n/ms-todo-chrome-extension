@@ -1,5 +1,6 @@
 export enum StorageKey {
   PinnedTodoId = "pinned-todo-id",
+  Theme = "theme",
 }
 
 export async function storageSet(items: {

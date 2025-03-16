@@ -1,14 +1,15 @@
+import { Delete, Edit, HomeTwo, Pin } from "@icon-park/react";
+import { Button, Card, CardBody, Tooltip, useDisclosure } from "@nextui-org/react";
 import { useState } from "react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
 
-import { Delete, Edit, HomeTwo, Pin } from "@icon-park/react";
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
-import { Button, Card, CardBody, Tooltip, useDisclosure } from "@nextui-org/react";
 import classNames from "classnames";
 import { motion } from "framer-motion";
 
 import { useTodoList } from "@/context";
+import { useTheme } from "@/utils/theme";
 
 import EditItem from "./edit";
 
@@ -26,6 +27,7 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
   const pinnedTodoData = useTodoList(store => store.pinnedTodoData);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { t } = useTranslation();
+  const { isDark, isLight } = useTheme();
 
   const isPinned = data.id === pinnedTodoData.id;
   const isSelfCreated = data?.wellknownListName === "none";
@@ -37,12 +39,13 @@ const ListItem: React.FC<Props> = ({ data, isSelected, onToggle, onUpdate, onPin
         onMouseLeave={() => setHovered(false)}
         onClick={onToggle}
         className={classNames({
-          "bg-blue-100": isSelected,
+          "bg-green-200": isSelected && isLight,
+          "bg-[#1e3a8a]": isSelected && isDark,
         })}
       >
         <div className="flex items-center space-x-2">
           {isPinned
-            ? <HomeTwo theme="outline" size={14} className="text-green-600" strokeWidth={4} />
+            ? <HomeTwo theme="outline" size={14} strokeWidth={4} />
             : null}
           <div className="flex-auto truncate text-base">{data.displayName}</div>
           <motion.div

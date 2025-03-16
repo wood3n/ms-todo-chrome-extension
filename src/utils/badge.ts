@@ -1,6 +1,6 @@
 /** update task num to badge */
-export function updateBadge(taskNum: number) {
+export function updateBadge(taskNum: number | string) {
   chrome.action.setBadgeText({
-    text: String(taskNum),
+    text: typeof taskNum === "string" ? taskNum : String(taskNum),
   });
 }

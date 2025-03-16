@@ -1,5 +1,6 @@
-import { defineConfig } from "@rsbuild/core";
 import { pluginReact } from "@rsbuild/plugin-react";
+
+import { defineConfig } from "@rsbuild/core";
 import { pluginSvgr } from "@rsbuild/plugin-svgr";
 
 export default defineConfig({

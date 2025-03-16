@@ -1,15 +1,12 @@
+import { useIsAuthenticated } from "@azure/msal-react";
 import React, { useLayoutEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-
-import { useIsAuthenticated } from "@azure/msal-react";
 
 import Spin from "@/components/spin";
 import { useTodoList, useUser } from "@/context";
 
 import Home from "../home";
-
-import "react-toastify/dist/ReactToastify.min.css";
 
 const Main = () => {
   const isAuthenticated = useIsAuthenticated();

@@ -1,8 +1,7 @@
+import TodoIcon from "@/assets/todo.svg?react";
+import { useIsAuthenticated } from "@azure/msal-react";
 import { Navigate } from "react-router-dom";
 
-import { useIsAuthenticated } from "@azure/msal-react";
-
-import TodoIcon from "@/assets/todo.svg?react";
 import BackgroundGradientAnimation from "@/components/background-gradient-animation";
 
 import SignInButton from "./signin-button";

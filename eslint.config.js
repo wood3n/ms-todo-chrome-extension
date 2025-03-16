@@ -3,6 +3,7 @@ import tailwind from "eslint-plugin-tailwindcss";
 
 export default eslintConfig(
   {
+    ignores: ["dist", "public", "node_modules", "docs", ".vscode"],
     languageOptions: {
       globals: {
         chrome: true,
@@ -30,6 +31,7 @@ export default eslintConfig(
       "unused-imports/no-unused-imports": "error",
       "antfu/top-level-function": 0,
       "react-hooks/exhaustive-deps": 0,
+      "react/no-unstable-context-value": 0,
       "unused-imports/no-unused-vars": [
         "warn",
         {
@@ -43,7 +45,8 @@ export default eslintConfig(
         "error",
         {
           order: "asc",
-          internalPattern: ["@/**"],
+          internalPattern: ["^@/.*"],
+          sortSideEffects: false,
           groups: [
             "react",
             "type",
@@ -52,7 +55,8 @@ export default eslintConfig(
             ["internal", "internal-type"],
             ["index", "index-type", "sibling", "sibling-type", "parent", "parent-type"],
             "side-effect",
-            ["style", "side-effect-style"],
+            "style",
+            "side-effect-style",
             "object",
             "unknown",
           ],

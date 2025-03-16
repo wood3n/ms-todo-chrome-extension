@@ -1,7 +1,6 @@
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 import NameInput from "@/components/name-input";
 import SpinContainer from "@/components/spin-container";

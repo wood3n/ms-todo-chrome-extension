@@ -1,7 +1,7 @@
+import { Spinner } from "@nextui-org/react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
 
-import { Spinner } from "@nextui-org/react";
 import clx from "classnames";
 
 interface Props {

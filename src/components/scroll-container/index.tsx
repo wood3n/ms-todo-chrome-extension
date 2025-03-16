@@ -1,10 +1,14 @@
+import type { OverlayScrollbarsComponentProps } from "overlayscrollbars-react";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import React from "react";
 
-import SimpleBar, { type Props } from "simplebar-react";
+import { useTheme } from "@/utils/theme";
 
-const ScrollContainer = (props: Props) => {
+const ScrollContainer = (props: OverlayScrollbarsComponentProps) => {
+  const { isDark } = useTheme();
+
   return (
-    <SimpleBar style={{ height: "100%" }} {...props} />
+    <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave", theme: isDark ? "os-theme-light" : "os-theme-dark" } }} {...props} />
   );
 };
 

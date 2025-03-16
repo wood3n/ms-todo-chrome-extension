@@ -1,9 +1,9 @@
+import { Link as LinkIcon, Upload as UploadIcon } from "@icon-park/react";
+import { Button, CardFooter, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { Link as LinkIcon, Upload as UploadIcon } from "@icon-park/react";
 import type { TodoTask } from "@microsoft/microsoft-graph-types";
-import { Button, CardFooter, Chip, Divider, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/react";
 
 import { formatISOTime } from "@/utils/date";
 
@@ -34,7 +34,7 @@ const TaskExtraInfo = ({ task }: Props) => {
             size="sm"
             variant="light"
             radius="full"
-            onClick={onOpen}
+            onPress={onOpen}
             className="h-6 min-h-6"
             startContent={<LinkIcon size={14} className="text-gray-500" />}
           >
@@ -42,17 +42,19 @@ const TaskExtraInfo = ({ task }: Props) => {
           </Button>
         )}
       </CardFooter>
-      <Modal placement="center" isDismissable={false} scrollBehavior="inside" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal placement="center" isDismissable={false} scrollBehavior="inside" isOpen={isOpen} onOpenChange={onOpenChange} className="overflow-hidden">
         <ModalContent>
           <ModalHeader className="pb-2">{t("attachment")}</ModalHeader>
-          <ModalBody className="items-start pb-4">
+          <ModalBody className="items-start p-2">
             <TaskAttachment
               task={task}
-              listClassName="max-h-60"
+              listClassName="p-2"
               uploadButton={(
-                <Button size="sm" color="primary" startContent={<UploadIcon />} onPressStart={e => e.continuePropagation()}>
-                  {t("upload")}
-                </Button>
+                <div className="px-3">
+                  <Button size="sm" color="primary" startContent={<UploadIcon />} onPressStart={e => e.continuePropagation()}>
+                    {t("upload")}
+                  </Button>
+                </div>
               )}
             />
           </ModalBody>

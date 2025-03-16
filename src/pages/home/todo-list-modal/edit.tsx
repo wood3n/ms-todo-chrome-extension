@@ -1,8 +1,8 @@
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { TodoTaskList } from "@microsoft/microsoft-graph-types";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 import NameInput from "@/components/name-input";
 

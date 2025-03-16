@@ -1,5 +1,6 @@
-import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import { Card, CardBody, Checkbox, useDisclosure } from "@nextui-org/react";
+
+import type { TodoTask } from "@microsoft/microsoft-graph-types";
 import classNames from "classnames";
 
 import TaskDetail from "../task";
@@ -22,7 +23,7 @@ const TaskListItem = ({ data, onUpdate, onComplete, onDelete }: Props) => {
         shadow="sm"
         className="w-full cursor-pointer overflow-x-hidden"
       >
-        <CardBody className="flex flex-row" onClick={onOpen}>
+        <CardBody className="flex flex-row overflow-hidden" onClick={onOpen}>
           <div className="flex min-w-0 grow flex-col space-y-1">
             <div className={classNames("truncate text-base", {
               "line-through": data.status === "completed",

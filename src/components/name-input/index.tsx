@@ -1,7 +1,6 @@
+import { Input, Kbd, Tooltip } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { Input, Kbd, Tooltip } from "@nextui-org/react";
 
 interface Props {
   autoFocus?: boolean;

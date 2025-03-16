@@ -1,8 +1,7 @@
+import { Button } from "@nextui-org/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-import { Button } from "@nextui-org/react";
 
 const Error = () => {
   const navigate = useNavigate();

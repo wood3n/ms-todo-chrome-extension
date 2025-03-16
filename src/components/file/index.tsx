@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-
 import { DeleteFour } from "@icon-park/react";
 import { Card, CardBody, Spinner } from "@nextui-org/react";
+import React, { useState } from "react";
+
 import classNames from "classnames";
 import { filesize } from "filesize";
 
@@ -26,10 +26,9 @@ const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage,
   return (
     <SpinContainer loading={downloading} size="sm">
       <Card
-        shadow="none"
-        radius="sm"
+        shadow="sm"
         isHoverable
-        className={classNames("cursor-pointer border border-solid border-gray-300", {
+        className={classNames("cursor-pointer", {
           "border-red-300": Boolean(errorMessage),
         }, className)}
       >
@@ -63,7 +62,7 @@ const FileItem = ({ name, size, onDownload, onDelete, isUploading, errorMessage,
             color="danger"
             radius="full"
             className="h-6 min-h-6 w-6 min-w-6"
-            onClick={onDelete}
+            onPress={onDelete}
           >
             <DeleteFour />
           </AsyncButton>

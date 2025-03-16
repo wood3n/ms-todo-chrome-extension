@@ -1,11 +1,10 @@
+import MSIcon from "@/assets/microsoft.svg?react";
+import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { Button } from "@nextui-org/react";
-
-import MSIcon from "@/assets/microsoft.svg?react";
 import { launchWebAuthFlow } from "@/auth/chrome-identity";
 import { getLoginInUrl } from "@/auth/ms-oauth";
 
