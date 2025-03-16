@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.4...v1.3.0) (2025-03-16)
+
+
+### Bug Fixes
+
+* change workflow ([4fdcdc4](https://github.com/wood3n/ms-todo-chrome-extension/commit/4fdcdc4ed44b3b9919bc789dd89623110d015572))
+
+
+### Features
+
+* add dark mode ([f14ddf2](https://github.com/wood3n/ms-todo-chrome-extension/commit/f14ddf20480dbd7c8291ed3e52f38ec58530a0f0))
+
 ## [1.2.4](https://github.com/wood3n/ms-todo-chrome-extension/compare/v1.2.3...v1.2.4) (2025-01-14)
 
 
